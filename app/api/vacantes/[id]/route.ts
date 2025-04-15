@@ -7,16 +7,52 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
     const id = Number(context?.params?.id);
     const body = await req.json();
 
+    const {
+      titulo,
+      descripcion,
+      salario,
+      ubicacion,
+      estado_id,
+      tecnologia_id // debe ser un array de ids: string[] o number[]
+    } = body;
+
+    // 1. Actualizar la vacante
     await sql`
       UPDATE Vacantes SET
-        titulo = ${body.titulo},
-        descripcion = ${body.descripcion},
-        salario = ${body.salario},
-        ubicacion = ${body.ubicacion},
-        estado_id = ${body.estado_id}
+        titulo = ${titulo},
+        descripcion = ${descripcion},
+        salario = ${salario},
+        ubicacion = ${ubicacion},
+        estado_id = ${estado_id}
       WHERE id = ${id};
     `;
 
+    // 2. Eliminar tecnologías actuales asociadas
+    await sql`
+      DELETE FROM vacantes_tecnologias
+      WHERE vacante_id = ${id};
+    `;
+
+    // 3. Insertar nuevas tecnologías (si hay)
+    if (Array.isArray(tecnologia_id) && tecnologia_id.length > 0) {
+      const values: any[] = [];
+      const placeholders: string[] = [];
+
+      tecnologia_id.forEach((techId, index) => {
+        values.push(id, Number(techId));
+        placeholders.push(`($${index * 2 + 1}, $${index * 2 + 2})`);
+      });
+
+      await sql.query(
+        `
+          INSERT INTO vacantes_tecnologias (vacante_id, tecnologia_id)
+          VALUES ${placeholders.join(', ')}
+       `,
+        values
+      );
+    }
+
+    // 4. Revalidar caché
     revalidateTag(`vacante-${id}`);
     revalidateTag('vacantes');
 
@@ -57,49 +93,6 @@ export async function DELETE(
       {
         status: 'error',
         message: 'Error al eliminar vacante',
-        error: error instanceof Error ? error.message : String(error)
-      },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET(req: NextRequest, context: any): Promise<Response> {
-  try {
-    const id = Number(context?.params?.id);
-    const result = await sql`
-      SELECT 
-        v.id, 
-        v.titulo, 
-        v.descripcion, 
-        v.salario, 
-        v.ubicacion, 
-        e.nombre AS estado, 
-        ARRAY_AGG(t.nombre) AS tecnologias,
-        v.fecha_publication,
-        v.estado_id
-      FROM Vacantes v
-      JOIN Estados e ON v.estado_id = e.id
-      LEFT JOIN Vacantes_Tecnologias vt ON v.id = vt.vacante_id
-      LEFT JOIN Tecnologias t ON vt.tecnologia_id = t.id
-      WHERE v.id = ${id}
-      GROUP BY v.id, e.nombre;
-    `;
-
-    if (result.length === 0) {
-      return NextResponse.json(
-        { status: 'error', message: 'Vacante no encontrada' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ status: 'ok', data: result[0] });
-  } catch (error) {
-    console.error('Error al obtener vacante:', error);
-    return NextResponse.json(
-      {
-        status: 'error',
-        message: 'Error al obtener vacante',
         error: error instanceof Error ? error.message : String(error)
       },
       { status: 500 }

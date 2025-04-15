@@ -10,53 +10,27 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Loader2 } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
-import { BASE_URL, deleteVacante, updateVacante } from './actions';
+import { deleteVacante, updateVacante } from './actions';
 import { useRouter } from 'next/navigation';
 import { TVacante } from '@/lib/models';
 import { showToast } from '@/components/showToast';
-import LoadingOverlay from '@/components/ui/loading-overlay';
 import { useGlobalStore } from '@/lib/global-store';
+import VacanteForm from '@/components/forms/vacante-form';
 
-export function Vacante({ vacante }: { vacante: TVacante }) {
+export function Vacante({
+  vacante,
+  listEstados,
+  listTecnologias
+}: {
+  vacante: TVacante;
+  listEstados: { id: number; nombre: string }[];
+  listTecnologias: { id: number; nombre: string }[];
+}) {
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
-
-  const [open, setOpen] = useState(false);
-  const [titulo, setTitulo] = useState(vacante.titulo);
-  const [descripcion, setDescripcion] = useState(vacante.descripcion);
-
-  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append('id', String(vacante.id));
-      formData.append('titulo', titulo);
-      formData.append('descripcion', descripcion);
-      formData.append('estado_id', String(vacante.estado_id));
-      formData.append('salario', String(vacante.salario));
-      formData.append('ubicacion', vacante.ubicacion);
-
-      await updateVacante(formData);
-
-      showToast('Vacante actualizada correctamente', 'success');
-      setOpen(false);
-      router.refresh();
-    } catch (err) {
-      showToast('Error al actualizar vacante', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -68,8 +42,6 @@ export function Vacante({ vacante }: { vacante: TVacante }) {
       await deleteVacante(formData);
 
       showToast('Vacante eliminada correctamente', 'success');
-
-      setOpen(false);
       router.refresh();
     } catch (err) {
       showToast('Error al eliminar vacante', 'error');
@@ -83,12 +55,14 @@ export function Vacante({ vacante }: { vacante: TVacante }) {
       <TableRow>
         <TableCell className="font-medium">{vacante.id}</TableCell>
         <TableCell className="font-medium">{vacante.titulo}</TableCell>
-        <TableCell className="font-medium flex gap-x-2 max-w-sm wrap">
-          {vacante.tecnologias.map((tecnologia) => (
-            <Badge key={tecnologia} variant="outline" className="capitalize">
-              {tecnologia}
-            </Badge>
-          ))}
+        <TableCell className="font-medium">
+          <div className="flex gap-2 items-center max-w-sm flex-wrap">
+            {vacante.tecnologias.map((tecnologia) => (
+              <Badge key={tecnologia} variant="outline" className="capitalize">
+                {tecnologia}
+              </Badge>
+            ))}
+          </div>
         </TableCell>
         <TableCell className="font-medium max-w-md">
           {vacante.descripcion}
@@ -108,59 +82,37 @@ export function Vacante({ vacante }: { vacante: TVacante }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => setOpen(true)}>
+              <DropdownMenuItem onClick={() => setShowEditModal(true)}>
                 Editar
               </DropdownMenuItem>
+
               <DropdownMenuItem onClick={handleDelete}>Borrar</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </TableCell>
       </TableRow>
 
-      {/* Modal de edición */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Editar vacante</DialogTitle>
-            <DialogDescription>
-              Aquí puedes modificar los datos de la vacante.
-            </DialogDescription>
-          </DialogHeader>
-
-          <form className="space-y-4" onSubmit={handleSave}>
-            <div>
-              <label className="block text-sm font-medium mb-1">Título</label>
-              <input
-                className="w-full border px-3 py-2 rounded-md"
-                value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Descripción
-              </label>
-              <textarea
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md max-h-72 min-h-32"
-              />
-            </div>
-
-            <div className="flex justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
-              >
-                Cancelar
-              </Button>
-              <Button type="submit">'Guardar'</Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <VacanteForm
+        open={showEditModal}
+        setOpen={setShowEditModal}
+        mode="edit"
+        defaultValues={{
+          id: vacante.id,
+          titulo: vacante.titulo,
+          descripcion: vacante.descripcion,
+          salario: vacante.salario,
+          ubicacion: vacante.ubicacion,
+          estado_id: String(vacante.estado_id),
+          tecnologia_id: vacante.tecnologias.length
+            ? vacante.tecnologias.map((t) => String(t))
+            : []
+        }}
+        estados={listEstados}
+        tecnologias={listTecnologias}
+        onSubmit={async (formData) => {
+          await updateVacante(formData);
+        }}
+      />
     </>
   );
 }

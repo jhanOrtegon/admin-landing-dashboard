@@ -23,10 +23,14 @@ import { Vacante } from './vacante';
 import { TVacante } from '@/lib/models';
 
 export function VacantesTable({
+  estados,
+  tecnologias,
   vacantes,
   offset,
   totalVacantes
 }: {
+  estados: { id: number; nombre: string }[];
+  tecnologias: { id: number; nombre: string }[];
   offset: number;
   vacantes: TVacante[];
   totalVacantes: number;
@@ -70,7 +74,12 @@ export function VacantesTable({
           </TableHeader>
           <TableBody>
             {vacantes.map((vacante) => (
-              <Vacante key={vacante.id} vacante={vacante} />
+              <Vacante
+                key={vacante.id}
+                vacante={vacante}
+                listEstados={estados}
+                listTecnologias={tecnologias}
+              />
             ))}
           </TableBody>
         </Table>

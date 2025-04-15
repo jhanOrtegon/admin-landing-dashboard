@@ -12,7 +12,10 @@ export async function createVacante(formData: FormData) {
     estado_id: Number(formData.get('estado_id')),
     salario: Number(formData.get('salario')),
     ubicacion: formData.get('ubicacion'),
-    fecha_publication: new Date().toISOString()
+    fecha_publication: new Date().toISOString(),
+    tecnologia_id: formData
+      .getAll('tecnologia_id[]')
+      .filter((v) => v !== 'null')
   };
 
   try {
@@ -65,7 +68,10 @@ export async function updateVacante(formData: FormData) {
     descripcion: formData.get('descripcion'),
     estado_id: Number(formData.get('estado_id')),
     salario: Number(formData.get('salario')),
-    ubicacion: formData.get('ubicacion')
+    ubicacion: formData.get('ubicacion'),
+    tecnologia_id: formData
+      .getAll('tecnologia_id[]')
+      .filter((v) => v !== 'null')
   };
 
   try {
