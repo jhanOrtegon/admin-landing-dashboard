@@ -12,21 +12,23 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { deleteVacante, updateVacante } from './actions';
 import { useRouter } from 'next/navigation';
-import { TVacante } from '@/lib/models';
+
 import { showToast } from '@/components/showToast';
 import { useGlobalStore } from '@/lib/global-store';
-import VacanteForm from '@/components/forms/vacante-form';
 
-export function Vacante({
-  vacante,
-  listEstados,
-  listTecnologias
+import { TProducto } from '../types';
+import { deleteProducto } from '../_actions/delete-product';
+import ProductForm from './product-form';
+import { updateProducto } from '../_actions/update-product';
+import Image from 'next/image';
+
+export function Product({
+  product,
+  listEstados
 }: {
-  vacante: TVacante;
+  product: TProducto;
   listEstados: { id: number; nombre: string }[];
-  listTecnologias: { id: number; nombre: string }[];
 }) {
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
@@ -37,14 +39,14 @@ export function Vacante({
       setLoading(true);
 
       const formData = new FormData();
-      formData.append('id', String(vacante.id));
+      formData.append('id', String(product.id));
 
-      await deleteVacante(formData);
+      await deleteProducto(formData);
 
-      showToast('Vacante eliminada correctamente', 'success');
+      showToast('product eliminada correctamente', 'success');
       router.refresh();
     } catch (err) {
-      showToast('Error al eliminar vacante', 'error');
+      showToast('Error al eliminar product', 'error');
     } finally {
       setLoading(false);
     }
@@ -53,23 +55,44 @@ export function Vacante({
   return (
     <>
       <TableRow>
-        <TableCell className="font-medium">{vacante.id}</TableCell>
-        <TableCell className="font-medium">{vacante.titulo}</TableCell>
+        <TableCell className="font-medium">{product.id}</TableCell>
+        <TableCell className="font-medium">{product.nombre}</TableCell>
+        <TableCell className="font-medium">{product.categoría}</TableCell>
         <TableCell className="font-medium">
+          <div className="flex gap-2 items-center justify-center">
+            <img
+              width={100}
+              height={100}
+              alt={product.nombre}
+              src={product.imagen_nombre_principal}
+            />
+          </div>
+        </TableCell>
+        <TableCell className="font-medium">
+          <div className="flex gap-2 items-center justify-center">
+            <img
+              width={100}
+              height={100}
+              alt={product.nombre}
+              src={product.imagen_principal}
+            />
+          </div>
+        </TableCell>
+        {/* <TableCell className="font-medium">
           <div className="flex gap-2 items-center max-w-sm flex-wrap">
-            {vacante.tecnologias.map((tecnologia) => (
+            {product.tecnologias.map((tecnologia) => (
               <Badge key={tecnologia} variant="outline" className="capitalize">
                 {tecnologia}
               </Badge>
             ))}
           </div>
-        </TableCell>
-        <TableCell className="font-medium max-w-md">
-          {vacante.descripcion}
-        </TableCell>
+        </TableCell> */}
+        {/* <TableCell className="font-medium max-w-md">
+          {product.descripcion}
+        </TableCell> */}
         <TableCell>
           <Badge variant="outline" className="capitalize">
-            {vacante.estado}
+            {product.estado}
           </Badge>
         </TableCell>
         <TableCell>
@@ -82,6 +105,11 @@ export function Vacante({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => router.push(`/products/${product.id}`)}
+              >
+                Detalle
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setShowEditModal(true)}>
                 Editar
               </DropdownMenuItem>
@@ -91,25 +119,25 @@ export function Vacante({
         </TableCell>
       </TableRow>
 
-      <VacanteForm
+      <ProductForm
         open={showEditModal}
         setOpen={setShowEditModal}
         mode="edit"
         defaultValues={{
-          id: vacante.id,
-          titulo: vacante.titulo,
-          descripcion: vacante.descripcion,
-          salario: vacante.salario,
-          ubicacion: vacante.ubicacion,
-          estado_id: String(vacante.estado_id),
-          tecnologia_id: vacante.tecnologias.length
-            ? vacante.tecnologias.map((t) => String(t))
+          id: product.id,
+          categoría: product.categoría,
+          nombre: product.nombre,
+          descripción: product.descripción,
+          imagen_principal: product.imagen_principal,
+          imagen_nombre_principal: product.imagen_nombre_principal,
+          estado_id: String(product.estado_id),
+          carasteristicas: product.carasteristicas.length
+            ? product.carasteristicas.map((c) => String(c))
             : []
         }}
         estados={listEstados}
-        tecnologias={listTecnologias}
         onSubmit={async (formData) => {
-          await updateVacante(formData);
+          await updateProducto(formData);
         }}
       />
     </>

@@ -1,22 +1,22 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { VacantesTable } from './VacantesTable';
-import { getVacantes } from './actions';
-import { getOpciones, TOpcion } from './options';
 import VacanteForm from '@/components/forms/vacante-form';
+import { getVacantes } from '../actions';
+import { getOpciones, TOpcion } from '../options';
+import { VacantesTable } from '../VacantesTable';
+import { ProductsTable } from './_components/products-table';
+import { getProductos } from './_actions/get-product';
+import ProductForm from './_components/product-form';
+import { createProducto } from './_actions/create-product';
 
 export default async function VacantesPage(props: {
   searchParams: Promise<{ q: string; offset: string }>;
 }) {
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
-  const offset = searchParams.offset ?? 0;
-  const { newOffset, totalVacantes, vacantes } = await getVacantes(
-    search,
-    Number(offset),
-    10
-  );
+
+  const { productos } = await getProductos(search);
 
   const estados = getOpciones<TOpcion>('estados');
   const tecnologias = getOpciones<TOpcion>('tecnologias');
@@ -25,32 +25,28 @@ export default async function VacantesPage(props: {
     <Tabs defaultValue="all">
       <div className="flex items-center">
         <div className="ml-auto flex items-center gap-2">
-          <VacanteForm
+          <ProductForm
             estados={(await estados).data}
-            tecnologias={(await tecnologias).data}
             onSubmit={async (formData) => {
               'use server';
-              const { createVacante } = await import('./actions');
-              await createVacante(formData);
+              await createProducto(formData);
             }}
           >
             <Button size="sm" className="h-8 gap-1">
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Agregar vacante
+                Agregar producto
               </span>
             </Button>
-          </VacanteForm>
+          </ProductForm>
         </div>
       </div>
 
       <TabsContent value="all">
-        <VacantesTable
-          vacantes={vacantes}
-          offset={newOffset ?? 0}
-          totalVacantes={totalVacantes}
+        <ProductsTable
+          data={productos}
           estados={(await estados).data}
-          tecnologias={(await tecnologias).data}
+          // tecnologias={(await tecnologias).data}
         />
       </TabsContent>
     </Tabs>

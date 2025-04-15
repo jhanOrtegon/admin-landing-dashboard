@@ -24,7 +24,9 @@ export async function GET() {
           Tecnologias t ON vt.tecnologia_id = t.id
       GROUP BY 
           v.id, e.nombre
-      LIMIT 5;
+      ORDER BY 
+          v.fecha_publicacion DESC
+      LIMIT 100;
     `;
 
     return NextResponse.json({

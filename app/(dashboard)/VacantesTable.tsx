@@ -60,12 +60,8 @@ export function VacantesTable({
             <TableRow>
               <TableHead>Id</TableHead>
               <TableHead>Nombre</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Tecnologías
-              </TableHead>
-              <TableHead className="hidden md:table-cell">
-                Descripción
-              </TableHead>
+              <TableHead>Tecnologías</TableHead>
+              <TableHead>Descripción</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead>
                 <span className="sr-only">Acciones</span>
@@ -84,7 +80,7 @@ export function VacantesTable({
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         <form className="flex items-center w-full justify-between">
           <div className="text-xs text-muted-foreground">
             Showing{' '}
@@ -120,7 +116,7 @@ export function VacantesTable({
             </Button>
           </div>
         </form>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }

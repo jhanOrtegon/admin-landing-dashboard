@@ -1,8 +1,7 @@
+import { BASE_URL } from '@/lib/constant';
 import { GetVacantesResponse, TVacante } from '@/lib/models';
 
 const next = { tags: ['vacantes'] };
-
-export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // ✅ CREATE
 export async function createVacante(formData: FormData) {

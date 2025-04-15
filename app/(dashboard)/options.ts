@@ -1,4 +1,4 @@
-import { BASE_URL } from './actions';
+import { BASE_URL } from '@/lib/constant';
 
 export type TOpcion = {
   id: number;
