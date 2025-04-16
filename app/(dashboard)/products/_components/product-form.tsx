@@ -115,6 +115,8 @@ export default function ProductForm({
       carasteristicas
     };
 
+    console.log(values, 'values');
+
     const validation = ProductSchema.safeParse(values);
 
     if (!validation.success) {
@@ -134,6 +136,7 @@ export default function ProductForm({
 
     formData.append('categoría', categoria);
     formData.append('nombre', nombre);
+    formData.append('titulo', titulo);
     formData.append('descripción', descripcion);
     formData.append('imagen_principal', imagenPrincipal);
     formData.append('imagen_nombre_principal', imagenNombre);
