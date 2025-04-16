@@ -13,79 +13,79 @@ import { createProductoDetail } from '../_actions/create-product-detail';
 import { updateProductoDetail } from '../_actions/update-product-detail';
 import { deleteProductoDetail } from '../_actions/delete-product-detail';
 import { useRouter } from 'next/navigation';
-import { emptyProductDetailSections } from './types';
+import { dataIniital, emptyProductDetailSections } from './types';
+import { getProductos } from '../../_actions/get-product';
 
 const TabSchema = z.object({
-  id: z.number(),
-  titulo: z.string(),
-  texto: z.string(),
-  carasteristicas: z.array(z.string())
+  titulo: z.string().min(1),
+  texto: z.string().min(1),
+  carasteristicas: z.array(z.string().min(1))
 });
 
 const ArticuloSchema = z.object({
-  id: z.number(),
-  nombre: z.string(),
-  texto: z.string(),
-  url_imagen: z.string().url()
+  nombre: z.string().min(1),
+  texto: z.string().min(1),
+  url_imagen: z.string().min(1)
+});
+
+const BannerSchema = z.object({
+  nombre: z.string().min(1),
+  texto: z.string().min(1),
+  url_imagen: z.string().min(1).url(),
+  url_logotipo: z.string().min(1).url(),
+  carasteristicas: z.array(z.string().min(1))
 });
 
 const PrimeraSeccionSchema = z.object({
-  id: z.number(),
-  nombre: z.string(),
-  texto: z.string(),
-  primera_url_imagen: z.string().url(),
-  segunda_url_imagen: z.string().url()
+  nombre: z.string().min(1),
+  texto: z.string().min(1),
+  primera_url_imagen: z.string().min(1).url(),
+  segunda_url_imagen: z.string().min(1).url()
 });
 
 const SegundaSeccionSchema = z.object({
-  id: z.number(),
-  categoria: z.string(),
-  nombre: z.string(),
+  categoria: z.string().min(1),
+  nombre: z.string().min(1),
   artículos: z.array(ArticuloSchema)
 });
 
 const TerceraSeccionSchema = z.object({
-  id: z.number(),
-  categoria: z.string(),
-  nombre: z.string(),
-  url_imagen: z.string().url(),
-  carasteristicas: z.array(z.string())
+  categoria: z.string().min(1),
+  nombre: z.string().min(1),
+  url_imagen: z.string().min(1).url(),
+  carasteristicas: z.array(z.string().min(1))
 });
 
 const CuartaYQuintaSeccionSchema = z.object({
-  id: z.number(),
-  categoria: z.string(),
-  nombre: z.string(),
-  texto: z.string(),
-  url_imagen: z.string().url(),
+  categoria: z.string().min(1),
+  nombre: z.string().min(1),
+  texto: z.string().min(1),
+  url_imagen: z.string().min(1).url(),
   tabs: z.array(TabSchema)
 });
 
 const PreguntasSeccionSchema = z.object({
-  id: z.number(),
-  categoria: z.string(),
-  nombre: z.string(),
+  categoria: z.string().min(1),
+  nombre: z.string().min(1),
   tabs: z.array(TabSchema.omit({ carasteristicas: true }))
 });
 
 const ApoyoSeccionSchema = z.object({
-  id: z.number(),
-  categoria: z.string(),
-  nombre: z.string(),
-  urls: z.array(z.string().url())
+  categoria: z.string().min(1),
+  nombre: z.string().min(1),
+  urls: z.array(z.string().min(1).url())
 });
 
 export const sectionSchemas = {
-  primera_seccion: PrimeraSeccionSchema,
-  segunda_seccion: SegundaSeccionSchema,
-  tercera_seccion: TerceraSeccionSchema,
-  cuarta_seccion: CuartaYQuintaSeccionSchema,
-  quinta_seccion: CuartaYQuintaSeccionSchema,
-  seccion_preguntas: PreguntasSeccionSchema,
-  seccion_apoyo: ApoyoSeccionSchema
+  banner: BannerSchema,
+  primer_bloque: PrimeraSeccionSchema,
+  segundo_bloque: SegundaSeccionSchema,
+  tercer_bloque: TerceraSeccionSchema,
+  cuarto_bloque: CuartaYQuintaSeccionSchema,
+  quinto_bloque: CuartaYQuintaSeccionSchema,
+  preguntas: PreguntasSeccionSchema,
+  apoyo: ApoyoSeccionSchema
 };
-
-// ... importaciones y esquemas arriba (ya definidos)
 
 export function ProductPageDetail({ id }: { id: string }) {
   const router = useRouter();
@@ -97,13 +97,14 @@ export function ProductPageDetail({ id }: { id: string }) {
   const setLoading = useGlobalStore((state) => state.setLoading);
 
   const fields = [
-    'primera_seccion',
-    'segunda_seccion',
-    'tercera_seccion',
-    'cuarta_seccion',
-    'quinta_seccion',
-    'seccion_preguntas',
-    'seccion_apoyo',
+    'banner',
+    'primer_bloque',
+    'segundo_bloque',
+    'tercer_bloque',
+    'cuarto_bloque',
+    'quinto_bloque',
+    'preguntas',
+    'apoyo',
     'product_id'
   ];
 
@@ -111,6 +112,15 @@ export function ProductPageDetail({ id }: { id: string }) {
     setLoading(true);
     try {
       const response = await getProductosDetalle('');
+      const product = await getProductos('');
+      const existing = product.productos.find(
+        (d) => d.id.toString() === id.toString()
+      );
+
+      if (!existing) {
+        router.push(`/products`);
+        throw new Error('Producto no encontrado');
+      }
       const current = response.data.find((d) => d.product_id === id);
       if (current) {
         setDetalle(current);
@@ -120,9 +130,11 @@ export function ProductPageDetail({ id }: { id: string }) {
       } else {
         const mapped: Record<string, string> = {};
         const current = emptyProductDetailSections as any;
-        console.log(current, 'current');
+        // const current = dataIniital as any;
+
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
         setFormState({ ...mapped, product_id: id });
+        // setFormState({ ...dataIniital });
       }
     } catch {
       showToast('Error al consultar el detalle', 'error');
@@ -194,6 +206,11 @@ export function ProductPageDetail({ id }: { id: string }) {
         <summary className="cursor-pointer text-lg font-semibold mb-2">
           {title}
         </summary>
+        {globalErrors[sectionKey] && (
+          <p className="text-red-500 text-sm mt-2">
+            ⚠️ {globalErrors[sectionKey]}
+          </p>
+        )}
         <Card className="w-full pt-6 border-0">
           <CardContent className="space-y-4">
             {parsed?.error && (
@@ -208,83 +225,184 @@ export function ProductPageDetail({ id }: { id: string }) {
             )}
             {Object.entries(parsed)
               .filter(([key]) => key !== 'id')
-              .map(([key, value]) =>
-                typeof value === 'string' ? (
-                  <div key={key}>
-                    <Input
-                      placeholder={key.replace(/_/g, ' ')}
-                      value={value}
-                      onChange={(e) =>
-                        handleChange(sectionKey, key, e.target.value)
-                      }
-                    />
-                  </div>
-                ) : Array.isArray(value) && typeof value[0] === 'string' ? (
-                  <div key={key} className="flex gap-4 flex-col">
-                    {value.map((v, i) => (
-                      <Input
-                        key={i}
-                        placeholder={
-                          key.replace(/_/g, ' ').slice(0, -1) + ' ' + (i + 1)
-                        }
-                        value={v}
+              .map(([key, value]: [string, any]) => {
+                if (key === 'texto') {
+                  return (
+                    <div key={key}>
+                      <Textarea
+                        value={value}
+                        withAsterisk
+                        label={key.replace(/_/g, ' ')}
                         onChange={(e) =>
-                          handleChange(
-                            sectionKey,
-                            key,
-                            e.target.value.split('\n')
-                          )
+                          handleChange(sectionKey, key, e.target.value)
                         }
                       />
-                    ))}
-                  </div>
-                ) : Array.isArray(value) &&
-                  typeof value[0]?.url_imagen === 'string' ? (
-                  <div key={key} className="flex gap-4 flex-col">
-                    {value.map((v, i) => (
-                      <div
-                        key={i}
-                        className="flex gap-4 flex-col border p-2 rounded-md"
-                      >
-                        <Input
-                          placeholder={`nombre ${i + 1}`}
-                          value={v.url_imagen}
-                          onChange={(e) =>
-                            handleChange(
-                              sectionKey,
-                              key,
-                              e.target.value.split('\n')
-                            )
-                          }
-                        />
-                        <Textarea
-                          placeholder={`texto ${i + 1}`}
-                          value={v.texto}
-                          onChange={(e) =>
-                            handleChange(
-                              sectionKey,
-                              key,
-                              e.target.value.split('\n')
-                            )
-                          }
-                        />
+                    </div>
+                  );
+                }
 
+                if (typeof value === 'string') {
+                  return (
+                    <div key={key}>
+                      <Input
+                        withAsterisk
+                        label={key.replace(/_/g, ' ')}
+                        value={value}
+                        onChange={(e) =>
+                          handleChange(sectionKey, key, e.target.value)
+                        }
+                      />
+                    </div>
+                  );
+                }
+
+                if (Array.isArray(value) && typeof value[0] === 'string') {
+                  return (
+                    <div
+                      key={key}
+                      className="flex gap-4 flex-col border rounded-sm p-4"
+                    >
+                      {value.map((v, i) => (
                         <Input
-                          placeholder={`url_imagen ${i + 1}`}
-                          value={v.nombre}
-                          onChange={(e) =>
-                            handleChange(
-                              sectionKey,
-                              key,
-                              e.target.value.split('\n')
-                            )
+                          key={i}
+                          withAsterisk
+                          label={
+                            key.replace(/_/g, ' ').slice(0, -1) + ' ' + (i + 1)
                           }
+                          value={v}
+                          onChange={(e) => {
+                            const updated = [...value];
+                            updated[i] = e.target.value;
+                            handleChange(sectionKey, key, updated);
+                          }}
                         />
-                      </div>
-                    ))}
-                  </div>
-                ) : null
-              )}
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (key === 'tabs') {
+                  return (
+                    <div key={key} className="space-y-6">
+                      {(value as any[]).map((tab, tabIndex) => (
+                        <div
+                          key={tabIndex}
+                          className="flex flex-col gap-4 rounded-md border p-4 bg-white"
+                        >
+                          <Input
+                            withAsterisk
+                            label="Título"
+                            value={tab.titulo}
+                            onChange={(e) => {
+                              const tabs = [...value];
+                              tabs[tabIndex] = {
+                                ...tabs[tabIndex],
+                                titulo: e.target.value
+                              };
+                              handleChange(sectionKey, key, tabs);
+                            }}
+                          />
+
+                          <Textarea
+                            withAsterisk
+                            label="Texto"
+                            value={tab.texto}
+                            onChange={(e) => {
+                              const tabs = [...value];
+                              tabs[tabIndex] = {
+                                ...tabs[tabIndex],
+                                texto: e.target.value
+                              };
+                              handleChange(sectionKey, key, tabs);
+                            }}
+                          />
+
+                          {(tab.carasteristicas || []).map(
+                            (car: string, carIndex: number) => (
+                              <Input
+                                key={carIndex}
+                                withAsterisk
+                                label={`carasterística ${carIndex + 1}`}
+                                value={car}
+                                onChange={(e) => {
+                                  const tabs = [...value];
+                                  const updatedCar = [
+                                    ...(tabs[tabIndex].carasteristicas || [])
+                                  ];
+                                  updatedCar[carIndex] = e.target.value;
+                                  tabs[tabIndex] = {
+                                    ...tabs[tabIndex],
+                                    carasteristicas: updatedCar
+                                  };
+                                  handleChange(sectionKey, key, tabs);
+                                }}
+                              />
+                            )
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (
+                  Array.isArray(value) &&
+                  typeof value[0]?.url_imagen === 'string'
+                ) {
+                  return (
+                    <div key={key} className="flex gap-4 flex-col">
+                      {value.map((v, i) => (
+                        <div
+                          key={i}
+                          className="flex gap-4 flex-col border p-2 rounded-md"
+                        >
+                          <Input
+                            withAsterisk
+                            label={`nombre ${i + 1}`}
+                            value={v.url_imagen}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                url_imagen: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                          <Textarea
+                            withAsterisk
+                            label={`texto ${i + 1}`}
+                            value={v.texto}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                texto: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                          <Input
+                            withAsterisk
+                            label={`url_imagen ${i + 1}`}
+                            value={v.nombre}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                nombre: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                return null;
+              })}
           </CardContent>
         </Card>
       </details>
@@ -324,37 +442,45 @@ export function ProductPageDetail({ id }: { id: string }) {
   };
 
   return (
-    <div className="space-y-6 p-6">
-      <h1 className="text-2xl font-bold">Detalle del Producto #{id}</h1>
-      {fields
-        .slice(0, -1)
-        .map((field) => renderSectionCard(field, field.replace(/_/g, ' ')))}
-      <div className="flex gap-4 pt-4">
-        <Button onClick={() => handleSubmit(detalle ? 'update' : 'create')}>
-          {detalle ? 'Actualizar Detalle' : 'Crear Detalle'}
-        </Button>
-        {detalle && (
-          <Button
-            variant="destructive"
-            onClick={async () => {
-              try {
-                const formData = new FormData();
-                formData.append('id', detalle.id);
-                setLoading(true);
-                await deleteProductoDetail(formData);
-                setDetalle(null);
-                showToast('Detalle eliminado correctamente', 'success');
-                router.push(`/products`);
-              } catch {
-                showToast('Error al eliminar el detalle', 'error');
-              } finally {
-                setLoading(false);
-              }
-            }}
-          >
-            Eliminar Detalle
+    <div className="p-6 relative">
+      <div className="sticky top-0 flex flex-col rounded-md p-4 bg-[#f5f9fc] mb-6">
+        <h1 className="text-2xl font-bold">Detalle del Producto #{id}</h1>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        {fields
+          .slice(0, -1)
+          .map((field) => renderSectionCard(field, field.replace(/_/g, ' ')))}
+      </div>
+
+      <div className="sticky bottom-0 flex flex-col gap-4 py-4 rounded-md bg-[#f5f9fc]">
+        <div className="flex gap-4 pt-4">
+          <Button onClick={() => handleSubmit(detalle ? 'update' : 'create')}>
+            {detalle ? 'Actualizar Detalle' : 'Crear Detalle'}
           </Button>
-        )}
+          {detalle && (
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                try {
+                  const formData = new FormData();
+                  formData.append('id', detalle.id);
+                  setLoading(true);
+                  await deleteProductoDetail(formData);
+                  setDetalle(null);
+                  showToast('Detalle eliminado correctamente', 'success');
+                  router.push(`/products`);
+                } catch {
+                  showToast('Error al eliminar el detalle', 'error');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
+              Eliminar Detalle
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

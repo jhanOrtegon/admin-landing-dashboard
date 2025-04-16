@@ -6,13 +6,14 @@ export async function GET() {
     const result = await sql`
       SELECT 
         pd.id,
-        pd.primera_seccion,
-        pd.segunda_seccion,
-        pd.tercera_seccion,
-        pd.cuarta_seccion,
-        pd.quinta_seccion,
-        pd.seccion_preguntas,
-        pd.seccion_apoyo,
+        pd.banner,
+        pd.primer_bloque,
+        pd.segundo_bloque,
+        pd.tercer_bloque,
+        pd.cuarto_bloque,
+        pd.quinto_bloque,
+        pd.preguntas,
+        pd.apoyo,
         pd.product_id,
         p.nombre AS producto_nombre,
         pd.fecha_creacion
@@ -44,34 +45,37 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
-      primera_seccion,
-      segunda_seccion,
-      tercera_seccion,
-      cuarta_seccion,
-      quinta_seccion,
-      seccion_preguntas,
-      seccion_apoyo,
+      banner,
+      primer_bloque,
+      segundo_bloque,
+      tercer_bloque,
+      cuarto_bloque,
+      quinto_bloque,
+      preguntas,
+      apoyo,
       product_id
     } = body;
 
     await sql`
       INSERT INTO productos_detalle (
-        primera_seccion,
-        segunda_seccion,
-        tercera_seccion,
-        cuarta_seccion,
-        quinta_seccion,
-        seccion_preguntas,
-        seccion_apoyo,
+        banner,
+        primer_bloque,
+        segundo_bloque,
+        tercer_bloque,
+        cuarto_bloque,
+        quinto_bloque,
+        preguntas,
+        apoyo,
         product_id
       ) VALUES (
-        ${JSON.stringify(primera_seccion)}::jsonb,
-        ${JSON.stringify(segunda_seccion)}::jsonb,
-        ${JSON.stringify(tercera_seccion)}::jsonb,
-        ${JSON.stringify(cuarta_seccion)}::jsonb,
-        ${JSON.stringify(quinta_seccion)}::jsonb,
-        ${JSON.stringify(seccion_preguntas)}::jsonb,
-        ${JSON.stringify(seccion_apoyo)}::jsonb,
+        ${JSON.stringify(banner)}::jsonb,
+        ${JSON.stringify(primer_bloque)}::jsonb,
+        ${JSON.stringify(segundo_bloque)}::jsonb,
+        ${JSON.stringify(tercer_bloque)}::jsonb,
+        ${JSON.stringify(cuarto_bloque)}::jsonb,
+        ${JSON.stringify(quinto_bloque)}::jsonb,
+        ${JSON.stringify(preguntas)}::jsonb,
+        ${JSON.stringify(apoyo)}::jsonb,
         ${product_id}
       );
     `;

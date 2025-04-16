@@ -2,13 +2,14 @@ import { BASE_URL } from '@/lib/constant';
 
 export async function createProductoDetail(formData: FormData) {
   const requiredFields = [
-    'primera_seccion',
-    'segunda_seccion',
-    'tercera_seccion',
-    'cuarta_seccion',
-    'quinta_seccion',
-    'seccion_preguntas',
-    'seccion_apoyo',
+    'banner',
+    'primer_bloque',
+    'segundo_bloque',
+    'tercer_bloque',
+    'cuarto_bloque',
+    'quinto_bloque',
+    'preguntas',
+    'apoyo',
     'product_id'
   ];
 
@@ -16,6 +17,7 @@ export async function createProductoDetail(formData: FormData) {
 
   for (const field of requiredFields) {
     const value = formData.get(field);
+
     if (!value || value === 'null') {
       throw new Error(`El campo "${field}" es obligatorio`);
     }
@@ -35,6 +37,8 @@ export async function createProductoDetail(formData: FormData) {
       }
     }
   }
+
+  console.log(payload, 'payload');
 
   try {
     const res = await fetch(`${BASE_URL}/api/productos-detalle`, {

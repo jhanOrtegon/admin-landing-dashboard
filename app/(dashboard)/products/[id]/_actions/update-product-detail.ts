@@ -8,13 +8,14 @@ export async function updateProductoDetail(formData: FormData) {
   }
 
   const requiredFields = [
-    'primera_seccion',
-    'segunda_seccion',
-    'tercera_seccion',
-    'cuarta_seccion',
-    'quinta_seccion',
-    'seccion_preguntas',
-    'seccion_apoyo',
+    'banner',
+    'primer_bloque',
+    'segundo_bloque',
+    'tercer_bloque',
+    'cuarto_bloque',
+    'quinto_bloque',
+    'preguntas',
+    'apoyo',
     'product_id'
   ];
 

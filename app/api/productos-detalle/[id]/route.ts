@@ -7,24 +7,26 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
     const body = await req.json();
 
     const {
-      primera_seccion,
-      segunda_seccion,
-      tercera_seccion,
-      cuarta_seccion,
-      quinta_seccion,
-      seccion_preguntas,
-      seccion_apoyo
+      banner,
+      primer_bloque,
+      segundo_bloque,
+      tercer_bloque,
+      cuarto_bloque,
+      quinto_bloque,
+      preguntas,
+      apoyo
     } = body;
 
     await sql`
       UPDATE productos_detalle SET
-        primera_seccion = ${JSON.stringify(primera_seccion)}::jsonb,
-        segunda_seccion = ${JSON.stringify(segunda_seccion)}::jsonb,
-        tercera_seccion = ${JSON.stringify(tercera_seccion)}::jsonb,
-        cuarta_seccion = ${JSON.stringify(cuarta_seccion)}::jsonb,
-        quinta_seccion = ${JSON.stringify(quinta_seccion)}::jsonb,
-        seccion_preguntas = ${JSON.stringify(seccion_preguntas)}::jsonb,
-        seccion_apoyo = ${JSON.stringify(seccion_apoyo)}::jsonb
+        banner = ${JSON.stringify(banner)}::jsonb,
+        primer_bloque = ${JSON.stringify(primer_bloque)}::jsonb,
+        segundo_bloque = ${JSON.stringify(segundo_bloque)}::jsonb,
+        tercer_bloque = ${JSON.stringify(tercer_bloque)}::jsonb,
+        cuarto_bloque = ${JSON.stringify(cuarto_bloque)}::jsonb,
+        quinto_bloque = ${JSON.stringify(quinto_bloque)}::jsonb,
+        preguntas = ${JSON.stringify(preguntas)}::jsonb,
+        apoyo = ${JSON.stringify(apoyo)}::jsonb
       WHERE id = ${id};
     `;
 
