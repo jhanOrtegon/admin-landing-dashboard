@@ -19,7 +19,6 @@ export default async function VacantesPage(props: {
   const { productos } = await getProductos(search);
 
   const estados = getOpciones<TOpcion>('estados');
-  const tecnologias = getOpciones<TOpcion>('tecnologias');
 
   return (
     <Tabs defaultValue="all">
@@ -43,11 +42,7 @@ export default async function VacantesPage(props: {
       </div>
 
       <TabsContent value="all">
-        <ProductsTable
-          data={productos}
-          estados={(await estados).data}
-          // tecnologias={(await tecnologias).data}
-        />
+        <ProductsTable data={productos} estados={(await estados).data} />
       </TabsContent>
     </Tabs>
   );

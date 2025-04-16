@@ -6,6 +6,7 @@ export async function createProducto(formData: FormData) {
   const payload = {
     categoría: formData.get('categoría'),
     nombre: formData.get('nombre'),
+    titulo: formData.get('titulo'),
     descripción: formData.get('descripción'),
     imagen_principal: formData.get('imagen_principal'),
     imagen_nombre_principal: formData.get('imagen_nombre_principal'),

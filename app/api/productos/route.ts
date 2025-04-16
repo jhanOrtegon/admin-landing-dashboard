@@ -13,6 +13,7 @@ export async function GET() {
         p.id,
         p."categoría",
         p.nombre,
+        p.titulo,
         p."descripción",
         p.imagen_principal,
         p.imagen_nombre_principal,
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
     const {
       categoría,
       nombre,
+      titulo,
       descripción,
       imagen_principal,
       imagen_nombre_principal,
@@ -67,6 +69,7 @@ export async function POST(req: Request) {
       INSERT INTO productos (
         "categoría",
         nombre,
+        titulo
         "descripción",
         imagen_principal,
         imagen_nombre_principal,
@@ -75,6 +78,7 @@ export async function POST(req: Request) {
       ) VALUES (
         ${categoría},
         ${nombre},
+        ${titulo},
         ${descripción},
         ${imagen_principal},
         ${imagen_nombre_principal},

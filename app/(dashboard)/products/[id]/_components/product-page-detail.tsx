@@ -414,10 +414,33 @@ export function ProductPageDetail({ id }: { id: string }) {
       showToast('Todos los campos son obligatorios', 'error');
       return;
     }
+    // 1. Parsear los artículos del segundo bloque
+    const segundoBloqueParsed = JSON.parse(formState.segundo_bloque);
 
+    // 2. Intercambiar nombre y url_imagen en cada artículo
+    const articulosFormateados = segundoBloqueParsed.artículos.map(
+      (a: any) => ({
+        ...a,
+        url_imagen: a.nombre,
+        nombre: a.url_imagen
+      })
+    );
+
+    // 3. Reemplazar el segundo_bloque con la nueva estructura formateada
+    const newFormState = {
+      ...formState,
+      segundo_bloque: JSON.stringify({
+        ...segundoBloqueParsed,
+        artículos: articulosFormateados
+      })
+    } as any;
+
+    // 4. Preparar formData si lo necesitas
     const formData = new FormData();
+    // Aquí puedes seguir agregando campos a formData si es necesario
+
     try {
-      fields.forEach((f) => formData.append(f, formState[f]));
+      fields.forEach((f) => formData.append(f, newFormState[f]));
       formData.append('id', detalle?.id || '');
 
       setLoading(true);

@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { z } from 'zod';
+import { set, z } from 'zod';
 import { TOpcion, TOpcionResponse } from 'app/(dashboard)/options';
 import { Badge } from '@/components/ui/badge';
 import { useGlobalStore } from '@/lib/global-store';
@@ -29,6 +29,7 @@ import { showToast } from '@/components/showToast';
 const ProductSchema = z.object({
   categoría: z.string().min(1, 'La categoría es obligatoria'),
   nombre: z.string().min(1, 'El nombre es obligatorio'),
+  titulo: z.string().min(1, 'El titulo es obligatorio'),
   descripción: z
     .string()
     .min(10, 'La descripción debe tener al menos 10 caracteres'),
@@ -49,6 +50,7 @@ type Props = {
     id?: number;
     categoría: string;
     nombre: string;
+    titulo: string;
     descripción: string;
     imagen_principal: string;
     imagen_nombre_principal: string;
@@ -81,6 +83,7 @@ export default function ProductForm({
 
   const [categoria, setCategoria] = useState(defaultValues?.categoría || '');
   const [nombre, setNombre] = useState(defaultValues?.nombre || '');
+  const [titulo, setTitulo] = useState(defaultValues?.titulo || '');
   const [descripcion, setDescripcion] = useState(
     defaultValues?.descripción || ''
   );
@@ -104,6 +107,7 @@ export default function ProductForm({
     const values = {
       categoría: categoria,
       nombre,
+      titulo,
       descripción: descripcion,
       imagen_principal: imagenPrincipal,
       imagen_nombre_principal: imagenNombre,
@@ -158,6 +162,7 @@ export default function ProductForm({
   const resetForm = () => {
     setCategoria('');
     setNombre('');
+    setTitulo('');
     setDescripcion('');
     setImagenPrincipal('');
     setImagenNombre('');
@@ -208,30 +213,42 @@ export default function ProductForm({
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               required
+              withAsterisk
+              label="Nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
+            <Input
+              required
+              withAsterisk
               label="Categoría"
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
             />
             <Input
               required
-              label="Nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              withAsterisk
+              label="Titulo"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
             />
             <Textarea
               required
+              withAsterisk
               label="Descripción"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
             />
             <Input
               required
+              withAsterisk
               label="Imagen principal (URL)"
               value={imagenPrincipal}
               onChange={(e) => setImagenPrincipal(e.target.value)}
             />
             <Input
               required
+              withAsterisk
               label="Nombre del archivo"
               value={imagenNombre}
               onChange={(e) => setImagenNombre(e.target.value)}

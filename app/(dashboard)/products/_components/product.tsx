@@ -21,7 +21,6 @@ import { TProducto } from '../types';
 import { deleteProducto } from '../_actions/delete-product';
 import ProductForm from './product-form';
 import { updateProducto } from '../_actions/update-product';
-import Image from 'next/image';
 
 export function Product({
   product,
@@ -127,6 +126,7 @@ export function Product({
           id: product.id,
           categoría: product.categoría,
           nombre: product.nombre,
+          titulo: product.titulo,
           descripción: product.descripción,
           imagen_principal: product.imagen_principal,
           imagen_nombre_principal: product.imagen_nombre_principal,

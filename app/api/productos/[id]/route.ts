@@ -14,6 +14,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
     const {
       categoría,
       nombre,
+      titulo,
       descripción,
       imagen_principal,
       imagen_nombre_principal,
@@ -31,6 +32,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
       UPDATE productos SET
         "categoría" = ${categoría},
         nombre = ${nombre},
+        titulo = ${titulo},
         "descripción" = ${descripción},
         imagen_principal = ${imagen_principal},
         imagen_nombre_principal = ${imagen_nombre_principal},
