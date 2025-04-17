@@ -19,6 +19,7 @@ import VacanteForm from '@/components/forms/vacante-form';
 import { TVacante } from '../types';
 import { deleteVacante } from '../_actions/delete-vacancie';
 import { updateVacante } from '../_actions/update-vacancie';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 export function Vacante({
   vacante,
@@ -29,6 +30,7 @@ export function Vacante({
   listEstados: { id: number; nombre: string }[];
   listTecnologias: { id: number; nombre: string }[];
 }) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -86,11 +88,22 @@ export function Vacante({
               <DropdownMenuItem onClick={() => setShowEditModal(true)}>
                 Editar
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>Borrar</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowDeleteModal(true)}>
+                Borrar
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </TableCell>
       </TableRow>
+
+      <ConfirmDialog
+        open={showDeleteModal}
+        onConfirm={handleDelete}
+        onOpenChange={setShowDeleteModal}
+        description="Esta acción no se puede deshacer"
+        confirmText="Borrar"
+        cancelText="Cancelar"
+      />
 
       <VacanteForm
         open={showEditModal}

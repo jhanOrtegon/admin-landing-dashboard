@@ -13,16 +13,18 @@ import { updateProductoDetail } from './_actions/update-product-detail';
 import { deleteProductoDetail } from './_actions/delete-product-detail';
 import { useParams, useRouter } from 'next/navigation';
 
-import { getProductos } from '.././_actions/get-product';
+import { getProductos } from '../_actions/get-product';
 import { emptyProductDetailSections } from './_components/types';
 import { sectionSchemas } from './_schemas/schemas';
 import { TProducto } from '../types';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 export default function ProductPageDetail() {
   const params = useParams();
   const slug = params?.id as string;
   const router = useRouter();
   const [detalle, setDetalle] = useState<any>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formState, setFormState] = useState<Record<string, string>>({});
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const [globalErrors, setGlobalErrors] = useState<Record<string, string>>({});
@@ -401,49 +403,62 @@ export default function ProductPageDetail() {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('id', detalle.id);
+      setLoading(true);
+      await deleteProductoDetail(formData);
+      setDetalle(null);
+      showToast('Detalle eliminado correctamente', 'success');
+      router.push(`/productos`);
+    } catch {
+      showToast('Error al eliminar el detalle', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="p-6 pt-0 relative">
-      <div className="sticky top-0 flex flex-col rounded-md p-4 pl-0 pt-2 bg-[#f5f9fc] mb-6">
-        <h1 className="text-2xl font-bold">
-          Detalle del Producto {product?.nombre}
-        </h1>
-      </div>
+    <>
+      <div className="p-6 pt-0 relative">
+        <div className="sticky top-0 flex flex-col rounded-md p-4 pl-0 pt-2 bg-[#f5f9fc] mb-6">
+          <h1 className="text-2xl font-bold">
+            Detalle del Producto {product?.nombre}
+          </h1>
+        </div>
 
-      <div className="flex flex-col gap-6">
-        {fields
-          .slice(0, -1)
-          .map((field) => renderSectionCard(field, field.replace(/_/g, ' ')))}
-      </div>
+        <div className="flex flex-col gap-6">
+          {fields
+            .slice(0, -1)
+            .map((field) => renderSectionCard(field, field.replace(/_/g, ' ')))}
+        </div>
 
-      <div className="sticky bottom-0 flex flex-col gap-4 py-4 rounded-md bg-[#f5f9fc]">
-        <div className="flex gap-4 pt-4">
-          <Button onClick={() => handleSubmit(detalle ? 'update' : 'create')}>
-            {detalle ? 'Actualizar Detalle' : 'Crear Detalle'}
-          </Button>
-          {detalle && (
-            <Button
-              variant="destructive"
-              onClick={async () => {
-                try {
-                  const formData = new FormData();
-                  formData.append('id', detalle.id);
-                  setLoading(true);
-                  await deleteProductoDetail(formData);
-                  setDetalle(null);
-                  showToast('Detalle eliminado correctamente', 'success');
-                  router.push(`/productos`);
-                } catch {
-                  showToast('Error al eliminar el detalle', 'error');
-                } finally {
-                  setLoading(false);
-                }
-              }}
-            >
-              Eliminar Detalle
+        <div className="sticky bottom-0 flex flex-col gap-4 py-4 rounded-md bg-[#f5f9fc]">
+          <div className="flex gap-4 pt-4">
+            <Button onClick={() => handleSubmit(detalle ? 'update' : 'create')}>
+              {detalle ? 'Actualizar Detalle' : 'Crear Detalle'}
             </Button>
-          )}
+            {detalle && (
+              <Button
+                variant="destructive"
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Eliminar Detalle
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      <ConfirmDialog
+        open={showDeleteModal}
+        onConfirm={handleDelete}
+        onOpenChange={setShowDeleteModal}
+        description="Esta acción no se puede deshacer"
+        confirmText="Borrar"
+        cancelText="Cancelar"
+      />
+    </>
   );
 }

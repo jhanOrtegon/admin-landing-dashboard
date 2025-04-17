@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
 
   // Si ya está logueado y quiere ir a '/', lo mandamos a /vacantes
   if (isLoggedIn && pathname === '/') {
-    return NextResponse.redirect(new URL('/vacantes', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   // Si NO está logueado y quiere ir a otra ruta diferente de '/', lo mandamos al login

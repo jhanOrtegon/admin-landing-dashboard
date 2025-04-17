@@ -21,6 +21,7 @@ import { TProducto } from '../types';
 import { deleteProducto } from '../_actions/delete-product';
 import ProductForm from './product-form';
 import { updateProducto } from '../_actions/update-product';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 export function Product({
   product,
@@ -29,6 +30,7 @@ export function Product({
   product: TProducto;
   listEstados: { id: number; nombre: string }[];
 }) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -112,11 +114,22 @@ export function Product({
               <DropdownMenuItem onClick={() => setShowEditModal(true)}>
                 Editar
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>Borrar</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowDeleteModal(true)}>
+                Borrar
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </TableCell>
       </TableRow>
+
+      <ConfirmDialog
+        open={showDeleteModal}
+        onConfirm={handleDelete}
+        onOpenChange={setShowDeleteModal}
+        description="Esta acción no se puede deshacer"
+        confirmText="Borrar"
+        cancelText="Cancelar"
+      />
 
       <ProductForm
         open={showEditModal}

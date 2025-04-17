@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Package, PanelLeft, Users2 } from 'lucide-react';
+import { Package, PanelLeft, Briefcase, Users } from 'lucide-react';
 
 import {
   Breadcrumb,
@@ -24,15 +24,18 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   return (
     <Providers>
       <main className="flex min-h-screen w-full flex-col bg-muted/40">
         <DesktopNav />
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 pb-8 justify-between">
-            <MobileNav />
-            <DashboardBreadcrumb />
-          </header>
+          {pathname !== '/dashboard' && (
+            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 pb-8 justify-between">
+              <MobileNav />
+              <DashboardBreadcrumb />
+            </header>
+          )}
           <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40">
             {children}
           </main>
@@ -48,11 +51,14 @@ function DesktopNav() {
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
         <User />
-        <NavItem href="/vacantes" label="Vacantes">
-          <Users2 className="h-5 w-5" />
+        <NavItem href="/dashboard/vacantes" label="Vacantes">
+          <Briefcase className="h-5 w-5" />
         </NavItem>
-        <NavItem href="/productos" label="Productos">
+        <NavItem href="/dashboard/productos" label="Productos">
           <Package className="h-5 w-5" />
+        </NavItem>
+        <NavItem href="/equipo" label="Equipo de trabajo">
+          <Users className="h-5 w-5" />
         </NavItem>
       </nav>
     </aside>
@@ -71,19 +77,27 @@ function MobileNav() {
       <SheetContent side="left" className="sm:max-w-xs">
         <nav className="grid gap-6 text-lg font-medium">
           <Link
-            href="/vacantes"
+            href="/dashboard/vacantes"
             className="flex items-center gap-4 px-2.5 text-foreground"
           >
-            <Users2 className="h-5 w-5" />
+            <Briefcase className="h-5 w-5" />
             Vacantes
           </Link>
 
           <Link
-            href="/productos"
+            href="/dashboard/productos"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Package className="h-5 w-5" />
             Productos
+          </Link>
+
+          <Link
+            href="/equipo"
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+          >
+            <Users className="h-5 w-5" />
+            Equpipo de trabajo
           </Link>
         </nav>
       </SheetContent>

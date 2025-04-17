@@ -16,6 +16,7 @@ interface ConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   description: string;
+  title?: string;
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
@@ -26,6 +27,7 @@ export const ConfirmDialog = ({
   onOpenChange,
   description,
   onConfirm,
+  title,
   confirmText = 'Confirmar',
   cancelText = 'Cancelar'
 }: ConfirmDialogProps) => {
@@ -35,7 +37,7 @@ export const ConfirmDialog = ({
         <DialogHeader className="flex flex-col items-center text-center">
           <AlertCircle className="text-red-400 size-12" />
           <DialogTitle className="text-3xl font-bold text-gray-700 mb-6">
-            ¿Estás seguro?
+            {title ?? ' ¿Estás seguro? '}
           </DialogTitle>
           <DialogDescription className="text-gray-600 mt-10 text-center">
             {description}

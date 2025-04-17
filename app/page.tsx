@@ -33,7 +33,7 @@ export default function LoginPage() {
       document.cookie = 'logged_in=true; path=/; max-age=86400';
       setTimeout(() => {
         login();
-        router.push('/vacantes');
+        router.push('/dashboard');
         setLoading(false);
       }, 2000);
     } else {
