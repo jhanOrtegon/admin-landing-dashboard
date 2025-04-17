@@ -38,8 +38,6 @@ export async function createProductoDetail(formData: FormData) {
     }
   }
 
-  console.log(payload, 'payload');
-
   try {
     const res = await fetch(`${BASE_URL}/api/productos-detalle`, {
       method: 'POST',

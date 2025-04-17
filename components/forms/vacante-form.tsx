@@ -156,22 +156,19 @@ export default function VacanteForm({
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
-    if (defaultValues?.tecnologia_id?.length && tecnologias.length) {
-      // Convertimos nombres a IDs si no coincide con los IDs directamente
-      const mappedIds = tecnologias
-        .filter((t) => defaultValues.tecnologia_id.includes(String(t.nombre)))
-        .map((t) => String(t.id));
-
-      if (mappedIds.length) {
-        setTecnologiaId(mappedIds);
+    if (modalOpen) {
+      // Rellenar si hay datos de edición
+      if (defaultValues) {
+        setTitulo(defaultValues.titulo || '');
+        setDescripcion(defaultValues.descripcion || '');
+        setSalario(defaultValues.salario?.toString() || '');
+        setUbicacion(defaultValues.ubicacion || '');
+        setEstadoId(defaultValues.estado_id || '1');
+        setTecnologiaId(defaultValues.tecnologia_id || []);
       }
-    }
-  }, [defaultValues?.tecnologia_id, tecnologias]);
-
-  useEffect(() => {
-    if (!modalOpen) {
+    } else {
+      // Limpiar al cerrar
       setTitulo('');
       setDescripcion('');
       setSalario('');
@@ -179,7 +176,7 @@ export default function VacanteForm({
       setEstadoId('1');
       setTecnologiaId([]);
     }
-  }, [modalOpen]);
+  }, [modalOpen, defaultValues]);
 
   return (
     <>

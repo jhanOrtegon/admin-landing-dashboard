@@ -115,8 +115,6 @@ export default function ProductForm({
       carasteristicas
     };
 
-    console.log(values, 'values');
-
     const validation = ProductSchema.safeParse(values);
 
     if (!validation.success) {

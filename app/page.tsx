@@ -13,25 +13,31 @@ import { Input } from '@/components/ui/input';
 import { showToast } from '@/components/showToast';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'store/auth-store';
+import { useGlobalStore } from 'store/global-store';
 
-const USER = 'admin';
+const USER = 'jhan';
 const PASSWORD = '1234';
 
 export default function LoginPage() {
   const router = useRouter();
+  const setLoading = useGlobalStore((state) => state.setLoading);
 
   const { login } = useAuthStore((state) => state);
 
-  const [username, setUsername] = useState(USER);
-  const [password, setPassword] = useState(PASSWORD);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (username === USER && password === PASSWORD) {
+      setLoading(true);
       document.cookie = 'logged_in=true; path=/; max-age=86400';
-      login();
-      router.push('/vacantes');
+      setTimeout(() => {
+        setLoading(false);
+        login();
+        router.push('/vacantes');
+      }, 2000);
     } else {
       showToast('Usuario o contraseña incorrectos', 'error');
     }
