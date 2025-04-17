@@ -14,10 +14,10 @@ import { showToast } from '@/components/showToast';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'store/auth-store';
 import { useGlobalStore } from 'store/global-store';
-import { PASSWORD_LOGIN, USER_LOGIN } from '@/lib/constant';
+import { BASE_URL, PASSWORD_LOGIN, USER_LOGIN } from '@/lib/constant';
 
 export default function LoginPage() {
-  console.log({ USER_LOGIN, PASSWORD_LOGIN });
+  console.log({ USER_LOGIN, PASSWORD_LOGIN, BASE_URL });
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
 
