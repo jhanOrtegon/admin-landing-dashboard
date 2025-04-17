@@ -2,6 +2,7 @@ export type TProducto = {
   id: number;
   categoría: string;
   nombre: string;
+  slug: string;
   titulo: string;
   descripción: string;
   imagen_principal: string;

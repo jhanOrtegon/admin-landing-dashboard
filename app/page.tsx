@@ -14,15 +14,13 @@ import { showToast } from '@/components/showToast';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'store/auth-store';
 import { useGlobalStore } from 'store/global-store';
-
-const USER = 'jhan';
-const PASSWORD = '1234';
+import { PASSWORD_LOGIN, USER_LOGIN } from '@/lib/constant';
 
 export default function LoginPage() {
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
 
-  const { login } = useAuthStore((state) => state);
+  const { login, isLoggedIn } = useAuthStore((state) => state);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -30,13 +28,13 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (username === USER && password === PASSWORD) {
+    if (username === USER_LOGIN && password === PASSWORD_LOGIN) {
       setLoading(true);
       document.cookie = 'logged_in=true; path=/; max-age=86400';
       setTimeout(() => {
-        setLoading(false);
         login();
         router.push('/vacantes');
+        setLoading(false);
       }, 2000);
     } else {
       showToast('Usuario o contraseña incorrectos', 'error');
@@ -66,7 +64,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button type="submit" className="w-full mt-2">
+          <Button type="submit" disabled={isLoggedIn} className="w-full mt-2">
             Entrar
           </Button>
         </form>

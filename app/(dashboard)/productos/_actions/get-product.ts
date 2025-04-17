@@ -17,7 +17,10 @@ export async function getProductos(
     );
 
     return {
-      productos: filtered
+      productos: filtered.map((producto) => ({
+        ...producto,
+        slug: producto.nombre.toLowerCase().replaceAll(/\s+/g, '-')
+      }))
     };
   } catch (error) {
     console.error('Error al consultar productos:', error);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,15 +16,24 @@ import { useParams, useRouter } from 'next/navigation';
 import { getProductos } from '.././_actions/get-product';
 import { emptyProductDetailSections } from './_components/types';
 import { sectionSchemas } from './_schemas/schemas';
+import { TProducto } from '../types';
 
 export default function ProductPageDetail() {
   const params = useParams();
-  const id = params?.id as string;
+  const slug = params?.id as string;
   const router = useRouter();
   const [detalle, setDetalle] = useState<any>(null);
   const [formState, setFormState] = useState<Record<string, string>>({});
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const [globalErrors, setGlobalErrors] = useState<Record<string, string>>({});
+
+  const [product, setProduct] = useState<TProducto>();
+  console.log(product, 'xxx');
+
+  useMemo(async () => {
+    const product = await getProductos('');
+    setProduct(product.productos.find((d) => d.slug === slug));
+  }, [slug]);
 
   const setLoading = useGlobalStore((state) => state.setLoading);
 
@@ -44,28 +53,24 @@ export default function ProductPageDetail() {
     setLoading(true);
     try {
       const response = await getProductosDetalle('');
-      const product = await getProductos('');
-      const existing = product.productos.find(
-        (d) => d.id.toString() === id.toString()
-      );
 
-      if (!existing) {
+      if (!product?.id) {
         router.push(`/productos`);
         throw new Error('Producto no encontrado');
       }
-      const current = response.data.find((d) => d.product_id === id);
+      const current = response.data.find((d) => d.product_id === product?.id);
       if (current) {
         setDetalle(current);
         const mapped: Record<string, string> = {};
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
-        setFormState({ ...mapped, product_id: id });
+        setFormState({ ...mapped, product_id: product?.id.toString() });
       } else {
         const mapped: Record<string, string> = {};
         const current = emptyProductDetailSections as any;
         // const current = dataIniital as any;
 
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
-        setFormState({ ...mapped, product_id: id });
+        setFormState({ ...mapped, product_id: product?.id.toString() });
         // setFormState({ ...dataIniital });
       }
     } catch {
@@ -76,8 +81,8 @@ export default function ProductPageDetail() {
   };
 
   useEffect(() => {
-    fetchDetalle();
-  }, [id]);
+    if (product?.id) fetchDetalle();
+  }, [product?.id]);
 
   useEffect(() => {
     const stored = localStorage.getItem('openSections');
@@ -397,9 +402,11 @@ export default function ProductPageDetail() {
   };
 
   return (
-    <div className="p-6 relative">
-      <div className="sticky top-0 flex flex-col rounded-md p-4 bg-[#f5f9fc] mb-6">
-        <h1 className="text-2xl font-bold">Detalle del Producto #{id}</h1>
+    <div className="p-6 pt-0 relative">
+      <div className="sticky top-0 flex flex-col rounded-md p-4 pl-0 pt-2 bg-[#f5f9fc] mb-6">
+        <h1 className="text-2xl font-bold">
+          Detalle del Producto {product?.nombre}
+        </h1>
       </div>
 
       <div className="flex flex-col gap-6">
