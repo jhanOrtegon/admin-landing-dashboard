@@ -15,7 +15,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { useRouter } from 'next/navigation';
 
 import { showToast } from '@/components/showToast';
-import { useGlobalStore } from '@/lib/global-store';
+import { useGlobalStore } from 'store/global-store';
 
 import { TProducto } from '../types';
 import { deleteProducto } from '../_actions/delete-product';
@@ -105,7 +105,7 @@ export function Product({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => router.push(`/products/${product.id}`)}
+                onClick={() => router.push(`/productos/${product.id}`)}
               >
                 Detalle
               </DropdownMenuItem>

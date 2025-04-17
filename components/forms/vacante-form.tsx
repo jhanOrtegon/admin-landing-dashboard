@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select';
 import { z } from 'zod';
 import { showToast } from '../showToast';
-import { TOpcion, TOpcionResponse } from 'app/(dashboard)/options';
+import { TOpcion, TOpcionResponse } from 'selects/options';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import {
@@ -31,7 +31,7 @@ import {
   CommandInput,
   CommandItem
 } from '../ui/command';
-import { useGlobalStore } from '@/lib/global-store';
+import { useGlobalStore } from 'store/global-store';
 
 export const VacanteSchema = z.object({
   titulo: z.string().min(3, 'El título es obligatorio'),

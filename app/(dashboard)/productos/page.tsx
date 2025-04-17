@@ -1,10 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import VacanteForm from '@/components/forms/vacante-form';
-import { getVacantes } from '../actions';
-import { getOpciones, TOpcion } from '../options';
-import { VacantesTable } from '../VacantesTable';
+import { getOpciones, TOpcion } from '../../../selects/options';
 import { ProductsTable } from './_components/products-table';
 import { getProductos } from './_actions/get-product';
 import ProductForm from './_components/product-form';

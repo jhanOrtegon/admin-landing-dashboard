@@ -21,9 +21,9 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { set, z } from 'zod';
-import { TOpcion, TOpcionResponse } from 'app/(dashboard)/options';
+import { TOpcion, TOpcionResponse } from 'selects/options';
 import { Badge } from '@/components/ui/badge';
-import { useGlobalStore } from '@/lib/global-store';
+import { useGlobalStore } from 'store/global-store';
 import { showToast } from '@/components/showToast';
 
 const ProductSchema = z.object({

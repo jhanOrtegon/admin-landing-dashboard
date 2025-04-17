@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { showToast } from '@/components/showToast';
-import { useGlobalStore } from '@/lib/global-store';
+import { useGlobalStore } from 'store/global-store';
 import { z } from 'zod';
 import { getProductosDetalle } from '../_actions/get-product-detail';
 import { createProductoDetail } from '../_actions/create-product-detail';
@@ -118,7 +118,7 @@ export function ProductPageDetail({ id }: { id: string }) {
       );
 
       if (!existing) {
-        router.push(`/products`);
+        router.push(`/productos`);
         throw new Error('Producto no encontrado');
       }
       const current = response.data.find((d) => d.product_id === id);
@@ -129,12 +129,12 @@ export function ProductPageDetail({ id }: { id: string }) {
         setFormState({ ...mapped, product_id: id });
       } else {
         const mapped: Record<string, string> = {};
-        // const current = emptyProductDetailSections as any;
-        const current = dataIniital as any;
+        const current = emptyProductDetailSections as any;
+        // const current = dataIniital as any;
 
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
-        // setFormState({ ...mapped, product_id: id });
-        setFormState({ ...dataIniital });
+        setFormState({ ...mapped, product_id: id });
+        // setFormState({ ...dataIniital });
       }
     } catch {
       showToast('Error al consultar el detalle', 'error');
@@ -453,7 +453,7 @@ export function ProductPageDetail({ id }: { id: string }) {
         'success'
       );
 
-      router.push(`/products`);
+      router.push(`/productos`);
     } catch {
       showToast(
         `Error al ${action === 'create' ? 'crear' : 'actualizar'} el detalle`,
@@ -492,7 +492,7 @@ export function ProductPageDetail({ id }: { id: string }) {
                   await deleteProductoDetail(formData);
                   setDetalle(null);
                   showToast('Detalle eliminado correctamente', 'success');
-                  router.push(`/products`);
+                  router.push(`/productos`);
                 } catch {
                   showToast('Error al eliminar el detalle', 'error');
                 } finally {

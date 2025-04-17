@@ -1,10 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { VacantesTable } from './VacantesTable';
-import { getVacantes } from './actions';
-import { getOpciones, TOpcion } from './options';
+import { VacantesTable } from './_components/vacantes-table';
+
+import { getOpciones, TOpcion } from '../../../selects/options';
 import VacanteForm from '@/components/forms/vacante-form';
+import { getVacantes } from './_actions/get-vacancie';
 
 export default async function VacantesPage(props: {
   searchParams: Promise<{ q: string; offset: string }>;
@@ -30,7 +31,9 @@ export default async function VacantesPage(props: {
             tecnologias={(await tecnologias).data}
             onSubmit={async (formData) => {
               'use server';
-              const { createVacante } = await import('./actions');
+              const { createVacante } = await import(
+                './_actions/create-vacancie'
+              );
               await createVacante(formData);
             }}
           >
@@ -47,8 +50,6 @@ export default async function VacantesPage(props: {
       <TabsContent value="all">
         <VacantesTable
           vacantes={vacantes}
-          offset={newOffset ?? 0}
-          totalVacantes={totalVacantes}
           estados={(await estados).data}
           tecnologias={(await tecnologias).data}
         />

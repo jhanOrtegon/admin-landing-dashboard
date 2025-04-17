@@ -12,12 +12,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { deleteVacante, updateVacante } from './actions';
 import { useRouter } from 'next/navigation';
-import { TVacante } from '@/lib/models';
 import { showToast } from '@/components/showToast';
-import { useGlobalStore } from '@/lib/global-store';
+import { useGlobalStore } from 'store/global-store';
 import VacanteForm from '@/components/forms/vacante-form';
+import { TVacante } from '../types';
+import { deleteVacante } from '../_actions/delete-vacancie';
+import { updateVacante } from '../_actions/update-vacancie';
 
 export function Vacante({
   vacante,

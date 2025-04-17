@@ -1,7 +1,7 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import { useGlobalStore } from '@/lib/global-store';
+import { useGlobalStore } from 'store/global-store';
 
 export default function GlobalLoadingOverlay() {
   const isLoading = useGlobalStore((state) => state.isLoading);
