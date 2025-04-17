@@ -129,12 +129,12 @@ export function ProductPageDetail({ id }: { id: string }) {
         setFormState({ ...mapped, product_id: id });
       } else {
         const mapped: Record<string, string> = {};
-        const current = emptyProductDetailSections as any;
-        // const current = dataIniital as any;
+        // const current = emptyProductDetailSections as any;
+        const current = dataIniital as any;
 
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
-        setFormState({ ...mapped, product_id: id });
-        // setFormState({ ...dataIniital });
+        // setFormState({ ...mapped, product_id: id });
+        setFormState({ ...dataIniital });
       }
     } catch {
       showToast('Error al consultar el detalle', 'error');

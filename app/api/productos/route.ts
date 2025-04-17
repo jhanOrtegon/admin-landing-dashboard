@@ -67,10 +67,10 @@ export async function POST(req: Request) {
 
     await sql`
       INSERT INTO productos (
-        "categoría",
+        categoría,
         nombre,
-        titulo
-        "descripción",
+        titulo,
+        descripción,
         imagen_principal,
         imagen_nombre_principal,
         carasteristicas,
