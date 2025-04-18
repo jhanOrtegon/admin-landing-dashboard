@@ -44,7 +44,7 @@ export function Product({
 
       await deleteProducto(formData);
 
-      showToast('product eliminada correctamente', 'success');
+      showToast('producto eliminado correctamente', 'success');
       router.refresh();
     } catch (err) {
       showToast('Error al eliminar product', 'error');
