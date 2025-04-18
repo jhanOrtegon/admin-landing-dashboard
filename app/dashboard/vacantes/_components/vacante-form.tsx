@@ -21,17 +21,21 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { z } from 'zod';
-import { showToast } from '../showToast';
 import { TOpcion, TOpcionResponse } from 'selects/options';
 import { Badge } from '@/components/ui/badge';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { useGlobalStore } from 'store/global-store';
+import { showToast } from '@/components/showToast';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
 import {
   Command,
   CommandGroup,
   CommandInput,
   CommandItem
-} from '../ui/command';
-import { useGlobalStore } from 'store/global-store';
+} from '@/components/ui/command';
 
 export const VacanteSchema = z.object({
   titulo: z.string().min(3, 'El título es obligatorio'),

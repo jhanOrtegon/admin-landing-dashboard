@@ -15,11 +15,11 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { useRouter } from 'next/navigation';
 import { showToast } from '@/components/showToast';
 import { useGlobalStore } from 'store/global-store';
-import VacanteForm from '@/components/forms/vacante-form';
 import { TVacante } from '../types';
 import { deleteVacante } from '../_actions/delete-vacancie';
 import { updateVacante } from '../_actions/update-vacancie';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import VacanteForm from './vacante-form';
 
 export function Vacante({
   vacante,

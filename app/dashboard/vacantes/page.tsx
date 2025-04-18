@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { VacantesTable } from './_components/vacantes-table';
 
 import { getOpciones, TOpcion } from '../../../selects/options';
-import VacanteForm from '@/components/forms/vacante-form';
 import { getVacantes } from './_actions/get-vacancie';
+import VacanteForm from './_components/vacante-form';
 
 export default async function VacantesPage(props: {
   searchParams: Promise<{ q: string; offset: string }>;
