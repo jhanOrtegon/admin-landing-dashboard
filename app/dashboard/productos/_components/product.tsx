@@ -107,7 +107,9 @@ export function Product({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => router.push(`/productos/${product.slug}`)}
+                onClick={() =>
+                  router.push(`/dashboard/productos/${product.slug}`)
+                }
               >
                 Detalle
               </DropdownMenuItem>
