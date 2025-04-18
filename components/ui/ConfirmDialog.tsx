@@ -33,13 +33,13 @@ export const ConfirmDialog = ({
 }: ConfirmDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md rounded-2xl shadow-xl p-6">
+      <DialogContent className="max-w-md rounded-2xl shadow-xl p-6 bg-white dark:bg-zinc-900">
         <DialogHeader className="flex flex-col items-center text-center">
-          <AlertCircle className="text-red-400 size-12" />
-          <DialogTitle className="text-3xl font-bold text-gray-700 mb-6">
-            {title ?? ' ¿Estás seguro? '}
+          <AlertCircle className="text-red-500 dark:text-red-400 size-12" />
+          <DialogTitle className="text-3xl font-bold text-gray-800 dark:text-white mb-6">
+            {title ?? '¿Estás seguro?'}
           </DialogTitle>
-          <DialogDescription className="text-gray-600 mt-10 text-center">
+          <DialogDescription className="text-gray-600 dark:text-gray-300 mt-10 text-center">
             {description}
           </DialogDescription>
         </DialogHeader>
