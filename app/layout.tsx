@@ -4,9 +4,9 @@ import { Analytics } from '@vercel/analytics/react';
 import GlobalLoadingOverlay from '@/components/ui/loading-overlay';
 
 export const metadata = {
-  title: 'panel de administración',
+  title: 'Panel de Administración',
   description:
-    'A user admin dashboard configured with Next.js, Postgres, NextAuth, Tailwind CSS, TypeScript, and Prettier.'
+    'Aplicación interna para la gestión de vacantes laborales, administración de productos con sus respectivos detalles y organización del equipo de trabajo. Todo desde un panel centralizado, intuitivo y fácil de usar.'
 };
 
 export default function RootLayout({
