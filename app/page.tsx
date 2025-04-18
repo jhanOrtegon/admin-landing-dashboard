@@ -17,7 +17,6 @@ import { useGlobalStore } from 'store/global-store';
 import { BASE_URL, PASSWORD_LOGIN, USER_LOGIN } from '@/lib/constant';
 
 export default function LoginPage() {
-  console.log({ USER_LOGIN, PASSWORD_LOGIN, BASE_URL });
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
 
