@@ -195,7 +195,7 @@ export default function VacanteForm({
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <Input
               label="Título"
               value={titulo}

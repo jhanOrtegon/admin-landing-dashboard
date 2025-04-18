@@ -211,7 +211,7 @@ export default function ProductForm({
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <Input
               required
               withAsterisk

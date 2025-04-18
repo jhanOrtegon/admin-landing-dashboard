@@ -39,7 +39,7 @@ export function User() {
               width={36}
               height={36}
               alt="Avatar"
-              className="rounded-full"
+              className="rounded-full dark:brightness-50"
             />
           </Button>
         </DropdownMenuTrigger>
