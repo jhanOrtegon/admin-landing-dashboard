@@ -2,6 +2,7 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { Analytics } from '@vercel/analytics/react';
 import GlobalLoadingOverlay from '@/components/ui/loading-overlay';
+import { ThemeProvider } from 'next-themes';
 
 export const metadata = {
   title: 'Panel de Administración',
@@ -15,13 +16,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="es" suppressHydrationWarning>
       <body className="flex min-h-screen w-full flex-col">
-        <Toaster />
-        {children}
-        <GlobalLoadingOverlay />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Toaster />
+          {children}
+          <GlobalLoadingOverlay />
+          <Analytics />
+        </ThemeProvider>
       </body>
-      <Analytics />
     </html>
   );
 }

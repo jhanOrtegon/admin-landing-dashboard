@@ -28,7 +28,7 @@ export default async function VacantesPage(props: {
               await createProducto(formData);
             }}
           >
-            <Button size="sm" className="h-8 gap-1">
+            <Button size="sm" className="h-8 gap-1 my-2">
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Agregar producto

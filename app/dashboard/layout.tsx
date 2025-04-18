@@ -18,6 +18,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { User } from '../../components/ui/user';
 import Providers from '../../components/ui/providers';
 import { NavItem } from '../../components/ui/nav-item';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function DashboardLayout({
   children
@@ -27,6 +28,9 @@ export default function DashboardLayout({
   const pathname = usePathname();
   return (
     <Providers>
+      <div className="absolute top-2 right-4 p-4 z-50">
+        <ThemeToggle />
+      </div>
       <main className="flex min-h-screen w-full flex-col bg-muted/40">
         <DesktopNav />
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
