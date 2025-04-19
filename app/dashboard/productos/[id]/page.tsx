@@ -411,7 +411,7 @@ export default function ProductPageDetail() {
       await deleteProductoDetail(formData);
       setDetalle(null);
       showToast('Detalle eliminado correctamente', 'success');
-      router.push(`/productos`);
+      router.push(`/dashboard/productos`);
     } catch {
       showToast('Error al eliminar el detalle', 'error');
     } finally {
