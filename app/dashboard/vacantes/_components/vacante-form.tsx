@@ -34,7 +34,6 @@ export const VacanteSchema = z.object({
   titulo: z.string().min(3, 'El nombre es obligatorio'),
   descripcion: z.string().min(10, 'La descripción es obligatoria'),
   salario: z.string().regex(/^\d+$/, 'El salario debe ser un número entero'),
-  ubicacion: z.string().min(2, 'La ubicación es obligatoria'),
   tecnologia_id: z
     .array(z.string())
     .min(1, 'Seleccione al menos una tecnología')
