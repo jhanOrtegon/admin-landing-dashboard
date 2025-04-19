@@ -178,7 +178,7 @@ export default function EquipoForm({
             />
 
             <div className="flex justify-end">
-              <Button type="submit" disabled={isLoading}>
+              <Button variant={'outline'} type="submit" disabled={isLoading}>
                 {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 {mode === 'edit' ? 'Actualizar' : 'Guardar'}
               </Button>
