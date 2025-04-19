@@ -392,7 +392,7 @@ export default function ProductPageDetail() {
         'success'
       );
 
-      router.push(`/productos`);
+      router.push(`/dashboard/productos`);
     } catch {
       showToast(
         `Error al ${action === 'create' ? 'crear' : 'actualizar'} el detalle`,
