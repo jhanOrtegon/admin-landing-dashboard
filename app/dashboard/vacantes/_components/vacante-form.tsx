@@ -28,6 +28,7 @@ import {
   CommandInput,
   CommandItem
 } from '@/components/ui/command';
+import { useRouter } from 'next/navigation';
 
 export const VacanteSchema = z.object({
   titulo: z.string().min(3, 'El nombre es obligatorio'),
