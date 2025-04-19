@@ -226,7 +226,7 @@ export default function ProductPageDetail() {
                       {(value as any[]).map((tab, tabIndex) => (
                         <div
                           key={tabIndex}
-                          className="flex flex-col gap-4 rounded-md border p-4 bg-white"
+                          className="flex flex-col gap-4 rounded-md border p-4 bg-white dark:bg-zinc-900"
                         >
                           <Input
                             withAsterisk
