@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -30,6 +30,7 @@ export default function ProductPageDetail() {
   const [globalErrors, setGlobalErrors] = useState<Record<string, string>>({});
 
   const [product, setProduct] = useState<TProducto>();
+  console.log(product, 'xxx');
 
   useMemo(async () => {
     const product = await getProductos('');
@@ -54,16 +55,26 @@ export default function ProductPageDetail() {
     setLoading(true);
     try {
       const response = await getProductosDetalle('');
+
       if (!product?.id) {
         router.push(`/productos`);
         throw new Error('Producto no encontrado');
       }
       const current = response.data.find((d) => d.product_id === product?.id);
-      const mapped: Record<string, string> = {};
-      const source = current || emptyProductDetailSections;
-      fields.forEach((f) => (mapped[f] = JSON.stringify(source[f] || {})));
-      setFormState({ ...mapped, product_id: product?.id.toString() });
-      setDetalle(current || null);
+      if (current) {
+        setDetalle(current);
+        const mapped: Record<string, string> = {};
+        fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
+        setFormState({ ...mapped, product_id: product?.id.toString() });
+      } else {
+        const mapped: Record<string, string> = {};
+        const current = emptyProductDetailSections as any;
+        // const current = dataIniital as any;
+
+        fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
+        setFormState({ ...mapped, product_id: product?.id.toString() });
+        // setFormState({ ...dataIniital });
+      }
     } catch {
       showToast('Error al consultar el detalle', 'error');
     } finally {
@@ -80,7 +91,7 @@ export default function ProductPageDetail() {
     if (stored) {
       try {
         setOpenSections(JSON.parse(stored));
-      } catch {
+      } catch (e) {
         console.warn('Error parsing openSections from localStorage');
       }
     }
@@ -102,7 +113,7 @@ export default function ProductPageDetail() {
       try {
         const schema = sectionSchemas[key as keyof typeof sectionSchemas];
         schema.parse(JSON.parse(formState[key] || '{}'));
-      } catch {
+      } catch (e: any) {
         errors[key] = 'Sección inválida';
       }
     }
@@ -110,13 +121,242 @@ export default function ProductPageDetail() {
     return Object.keys(errors).length === 0;
   };
 
+  const renderSectionCard = (sectionKey: string, title: string) => {
+    let parsed: any = {};
+    let rawValue = formState[sectionKey] || '{}';
+
+    try {
+      parsed = JSON.parse(rawValue);
+    } catch {
+      parsed = { error: 'JSON inválido', fallback: rawValue };
+    }
+
+    return (
+      <details
+        key={sectionKey}
+        className="w-full rounded-md border p-4 bg-white"
+        open={openSections[sectionKey] ?? sectionKey === fields[0]}
+        onToggle={(e) => {
+          if (!(e.currentTarget instanceof HTMLDetailsElement)) return;
+          const isOpen = e.currentTarget.open;
+          setOpenSections((prev) => ({ ...prev, [sectionKey]: isOpen }));
+        }}
+      >
+        <summary className="cursor-pointer text-lg font-semibold mb-2">
+          {title}
+        </summary>
+        {globalErrors[sectionKey] && (
+          <p className="text-red-500 text-sm mt-2">
+            ⚠️ {globalErrors[sectionKey]}
+          </p>
+        )}
+        <Card className="w-full pt-6 border-0">
+          <CardContent className="space-y-4">
+            {parsed?.error && (
+              <div className="text-red-500">
+                {parsed.error}
+                {parsed.fallback && (
+                  <pre className="bg-gray-100 p-2 mt-2 text-xs overflow-auto rounded">
+                    {parsed.fallback}
+                  </pre>
+                )}
+              </div>
+            )}
+            {Object.entries(parsed)
+              .filter(([key]) => key !== 'id')
+              .map(([key, value]: [string, any]) => {
+                if (key === 'texto') {
+                  return (
+                    <div key={key}>
+                      <Textarea
+                        value={value}
+                        withAsterisk
+                        label={key.replace(/_/g, ' ')}
+                        onChange={(e) =>
+                          handleChange(sectionKey, key, e.target.value)
+                        }
+                      />
+                    </div>
+                  );
+                }
+
+                if (typeof value === 'string') {
+                  return (
+                    <div key={key}>
+                      <Input
+                        withAsterisk
+                        label={key.replace(/_/g, ' ')}
+                        value={value}
+                        onChange={(e) =>
+                          handleChange(sectionKey, key, e.target.value)
+                        }
+                      />
+                    </div>
+                  );
+                }
+
+                if (Array.isArray(value) && typeof value[0] === 'string') {
+                  return (
+                    <div
+                      key={key}
+                      className="flex gap-4 flex-col border rounded-sm p-4"
+                    >
+                      {value.map((v, i) => (
+                        <Input
+                          key={i}
+                          withAsterisk
+                          label={
+                            key.replace(/_/g, ' ').slice(0, -1) + ' ' + (i + 1)
+                          }
+                          value={v}
+                          onChange={(e) => {
+                            const updated = [...value];
+                            updated[i] = e.target.value;
+                            handleChange(sectionKey, key, updated);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (key === 'tabs') {
+                  return (
+                    <div key={key} className="space-y-6">
+                      {(value as any[]).map((tab, tabIndex) => (
+                        <div
+                          key={tabIndex}
+                          className="flex flex-col gap-4 rounded-md border p-4 bg-white"
+                        >
+                          <Input
+                            withAsterisk
+                            label="Título"
+                            value={tab.titulo}
+                            onChange={(e) => {
+                              const tabs = [...value];
+                              tabs[tabIndex] = {
+                                ...tabs[tabIndex],
+                                titulo: e.target.value
+                              };
+                              handleChange(sectionKey, key, tabs);
+                            }}
+                          />
+
+                          <Textarea
+                            withAsterisk
+                            label="Texto"
+                            value={tab.texto}
+                            onChange={(e) => {
+                              const tabs = [...value];
+                              tabs[tabIndex] = {
+                                ...tabs[tabIndex],
+                                texto: e.target.value
+                              };
+                              handleChange(sectionKey, key, tabs);
+                            }}
+                          />
+
+                          {(tab.carasteristicas || []).map(
+                            (car: string, carIndex: number) => (
+                              <Input
+                                key={carIndex}
+                                withAsterisk
+                                label={`carasterística ${carIndex + 1}`}
+                                value={car}
+                                onChange={(e) => {
+                                  const tabs = [...value];
+                                  const updatedCar = [
+                                    ...(tabs[tabIndex].carasteristicas || [])
+                                  ];
+                                  updatedCar[carIndex] = e.target.value;
+                                  tabs[tabIndex] = {
+                                    ...tabs[tabIndex],
+                                    carasteristicas: updatedCar
+                                  };
+                                  handleChange(sectionKey, key, tabs);
+                                }}
+                              />
+                            )
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (
+                  Array.isArray(value) &&
+                  typeof value[0]?.url_imagen === 'string'
+                ) {
+                  return (
+                    <div key={key} className="flex gap-4 flex-col">
+                      {value.map((v, i) => (
+                        <div
+                          key={i}
+                          className="flex gap-4 flex-col border p-2 rounded-md"
+                        >
+                          <Input
+                            withAsterisk
+                            label={`nombre ${i + 1}`}
+                            value={v.url_imagen}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                url_imagen: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                          <Textarea
+                            withAsterisk
+                            label={`texto ${i + 1}`}
+                            value={v.texto}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                texto: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                          <Input
+                            withAsterisk
+                            label={`url_imagen ${i + 1}`}
+                            value={v.nombre}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                nombre: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                return null;
+              })}
+          </CardContent>
+        </Card>
+      </details>
+    );
+  };
+
   const handleSubmit = async (action: 'create' | 'update') => {
     if (!validateAllSections()) {
       showToast('Todos los campos son obligatorios', 'error');
       return;
     }
-
+    // 1. Parsear los artículos del segundo bloque
     const segundoBloqueParsed = JSON.parse(formState.segundo_bloque);
+
+    // 2. Intercambiar nombre y url_imagen en cada artículo
     const articulosFormateados = segundoBloqueParsed.artículos.map(
       (a: any) => ({
         ...a,
@@ -125,6 +365,7 @@ export default function ProductPageDetail() {
       })
     );
 
+    // 3. Reemplazar el segundo_bloque con la nueva estructura formateada
     const newFormState = {
       ...formState,
       segundo_bloque: JSON.stringify({
@@ -133,18 +374,24 @@ export default function ProductPageDetail() {
       })
     } as any;
 
+    // 4. Preparar formData si lo necesitas
     const formData = new FormData();
+    // Aquí puedes seguir agregando campos a formData si es necesario
+
     try {
       fields.forEach((f) => formData.append(f, newFormState[f]));
       formData.append('id', detalle?.id || '');
+
       setLoading(true);
       if (action === 'create') await createProductoDetail(formData);
       else await updateProductoDetail(formData);
+
       await fetchDetalle();
       showToast(
         `Detalle ${action === 'create' ? 'creado' : 'actualizado'} correctamente`,
         'success'
       );
+
       router.push(`/productos`);
     } catch {
       showToast(
@@ -174,66 +421,20 @@ export default function ProductPageDetail() {
 
   return (
     <>
-      <div className="p-6  relative">
-        <div className=" flex flex-col rounded-md p-4 pl-0 pt-2  mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <div className="p-6 pt-0 relative">
+        <div className="sticky top-0 flex flex-col rounded-md p-4 pl-0 pt-2 bg-[#f5f9fc] mb-6">
+          <h1 className="text-2xl font-bold">
             Detalle del Producto {product?.nombre}
           </h1>
         </div>
 
         <div className="flex flex-col gap-6">
-          {fields.slice(0, -1).map((field) => {
-            let parsed: any = {};
-            let rawValue = formState[field] || '{}';
-
-            try {
-              parsed = JSON.parse(rawValue);
-            } catch {
-              parsed = { error: 'JSON inválido', fallback: rawValue };
-            }
-
-            return (
-              <details
-                key={field}
-                className="w-full rounded-md border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-zinc-900 shadow-sm"
-                open={openSections[field] ?? field === fields[0]}
-                onToggle={(e) => {
-                  if (!(e.currentTarget instanceof HTMLDetailsElement)) return;
-                  setOpenSections((prev) => ({
-                    ...prev,
-                    [field]: e.currentTarget.open
-                  }));
-                }}
-              >
-                <summary className="cursor-pointer text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100 hover:underline transition-colors">
-                  {field.replace(/_/g, ' ')}
-                </summary>
-                {globalErrors[field] && (
-                  <p className="text-red-500 text-sm mt-2">
-                    ⚠️ {globalErrors[field]}
-                  </p>
-                )}
-                <Card className="w-full pt-6 border-0 bg-white dark:bg-zinc-900">
-                  <CardContent className="space-y-4">
-                    {parsed?.error && (
-                      <div className="text-red-500">
-                        {parsed.error}
-                        {parsed.fallback && (
-                          <pre className="bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-gray-100 p-2 mt-2 text-xs overflow-auto rounded">
-                            {parsed.fallback}
-                          </pre>
-                        )}
-                      </div>
-                    )}
-                    {/* Aquí continuarías renderizando los campos */}
-                  </CardContent>
-                </Card>
-              </details>
-            );
-          })}
+          {fields
+            .slice(0, -1)
+            .map((field) => renderSectionCard(field, field.replace(/_/g, ' ')))}
         </div>
 
-        <div className="flex flex-col gap-4 py-4 rounded-md">
+        <div className="sticky bottom-0 flex flex-col gap-4 py-4 rounded-md bg-[#f5f9fc]">
           <div className="flex gap-4 pt-4">
             <Button onClick={() => handleSubmit(detalle ? 'update' : 'create')}>
               {detalle ? 'Actualizar Detalle' : 'Crear Detalle'}
