@@ -54,8 +54,8 @@ export function Equipo({ miembro }: { miembro: TEquipo }) {
         <TableCell>{miembro.descripcion}</TableCell>
         <TableCell>
           <img
-            src={miembro.url_image}
             alt={miembro.nombre}
+            src={miembro.url_image || ''}
             className="h-10 w-10 rounded-full object-cover"
           />
         </TableCell>

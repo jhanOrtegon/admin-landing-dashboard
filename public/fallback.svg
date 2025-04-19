@@ -1,0 +1,6 @@
+<!-- public/fallback.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <circle cx="64" cy="64" r="64" fill="#e2e8f0"/>
+  <circle cx="64" cy="48" r="24" fill="#cbd5e1"/>
+  <path d="M32 104c0-17.67 14.33-32 32-32s32 14.33 32 32" fill="#cbd5e1"/>
+</svg>
