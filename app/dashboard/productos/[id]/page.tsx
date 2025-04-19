@@ -69,9 +69,11 @@ export default function ProductPageDetail() {
       } else {
         const mapped: Record<string, string> = {};
         const current = emptyProductDetailSections as any;
+        // const current = dataIniital as any;
 
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
         setFormState({ ...mapped, product_id: product?.id.toString() });
+        // setFormState({ ...dataIniital });
       }
     } catch {
       showToast('Error al consultar el detalle', 'error');
@@ -160,7 +162,186 @@ export default function ProductPageDetail() {
                 )}
               </div>
             )}
-            {/* Aquí continúa el render dinámico de los campos */}
+            {Object.entries(parsed)
+              .filter(([key]) => key !== 'id')
+              .map(([key, value]: [string, any]) => {
+                if (key === 'texto') {
+                  return (
+                    <div key={key}>
+                      <Textarea
+                        value={value}
+                        withAsterisk
+                        label={key.replace(/_/g, ' ')}
+                        onChange={(e) =>
+                          handleChange(sectionKey, key, e.target.value)
+                        }
+                      />
+                    </div>
+                  );
+                }
+
+                if (typeof value === 'string') {
+                  return (
+                    <div key={key}>
+                      <Input
+                        withAsterisk
+                        label={key.replace(/_/g, ' ')}
+                        value={value}
+                        onChange={(e) =>
+                          handleChange(sectionKey, key, e.target.value)
+                        }
+                      />
+                    </div>
+                  );
+                }
+
+                if (Array.isArray(value) && typeof value[0] === 'string') {
+                  return (
+                    <div
+                      key={key}
+                      className="flex gap-4 flex-col border rounded-sm p-4"
+                    >
+                      {value.map((v, i) => (
+                        <Input
+                          key={i}
+                          withAsterisk
+                          label={
+                            key.replace(/_/g, ' ').slice(0, -1) + ' ' + (i + 1)
+                          }
+                          value={v}
+                          onChange={(e) => {
+                            const updated = [...value];
+                            updated[i] = e.target.value;
+                            handleChange(sectionKey, key, updated);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (key === 'tabs') {
+                  return (
+                    <div key={key} className="space-y-6">
+                      {(value as any[]).map((tab, tabIndex) => (
+                        <div
+                          key={tabIndex}
+                          className="flex flex-col gap-4 rounded-md border p-4 bg-white"
+                        >
+                          <Input
+                            withAsterisk
+                            label="Título"
+                            value={tab.titulo}
+                            onChange={(e) => {
+                              const tabs = [...value];
+                              tabs[tabIndex] = {
+                                ...tabs[tabIndex],
+                                titulo: e.target.value
+                              };
+                              handleChange(sectionKey, key, tabs);
+                            }}
+                          />
+
+                          <Textarea
+                            withAsterisk
+                            label="Texto"
+                            value={tab.texto}
+                            onChange={(e) => {
+                              const tabs = [...value];
+                              tabs[tabIndex] = {
+                                ...tabs[tabIndex],
+                                texto: e.target.value
+                              };
+                              handleChange(sectionKey, key, tabs);
+                            }}
+                          />
+
+                          {(tab.carasteristicas || []).map(
+                            (car: string, carIndex: number) => (
+                              <Input
+                                key={carIndex}
+                                withAsterisk
+                                label={`carasterística ${carIndex + 1}`}
+                                value={car}
+                                onChange={(e) => {
+                                  const tabs = [...value];
+                                  const updatedCar = [
+                                    ...(tabs[tabIndex].carasteristicas || [])
+                                  ];
+                                  updatedCar[carIndex] = e.target.value;
+                                  tabs[tabIndex] = {
+                                    ...tabs[tabIndex],
+                                    carasteristicas: updatedCar
+                                  };
+                                  handleChange(sectionKey, key, tabs);
+                                }}
+                              />
+                            )
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (
+                  Array.isArray(value) &&
+                  typeof value[0]?.url_imagen === 'string'
+                ) {
+                  return (
+                    <div key={key} className="flex gap-4 flex-col">
+                      {value.map((v, i) => (
+                        <div
+                          key={i}
+                          className="flex gap-4 flex-col border p-2 rounded-md"
+                        >
+                          <Input
+                            withAsterisk
+                            label={`nombre ${i + 1}`}
+                            value={v.url_imagen}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                url_imagen: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                          <Textarea
+                            withAsterisk
+                            label={`texto ${i + 1}`}
+                            value={v.texto}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                texto: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                          <Input
+                            withAsterisk
+                            label={`url_imagen ${i + 1}`}
+                            value={v.nombre}
+                            onChange={(e) => {
+                              const updated = [...value];
+                              updated[i] = {
+                                ...updated[i],
+                                nombre: e.target.value
+                              };
+                              handleChange(sectionKey, key, updated);
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                return null;
+              })}
           </CardContent>
         </Card>
       </details>
@@ -172,7 +353,10 @@ export default function ProductPageDetail() {
       showToast('Todos los campos son obligatorios', 'error');
       return;
     }
+    // 1. Parsear los artículos del segundo bloque
     const segundoBloqueParsed = JSON.parse(formState.segundo_bloque);
+
+    // 2. Intercambiar nombre y url_imagen en cada artículo
     const articulosFormateados = segundoBloqueParsed.artículos.map(
       (a: any) => ({
         ...a,
@@ -180,6 +364,8 @@ export default function ProductPageDetail() {
         nombre: a.url_imagen
       })
     );
+
+    // 3. Reemplazar el segundo_bloque con la nueva estructura formateada
     const newFormState = {
       ...formState,
       segundo_bloque: JSON.stringify({
@@ -187,18 +373,25 @@ export default function ProductPageDetail() {
         artículos: articulosFormateados
       })
     } as any;
+
+    // 4. Preparar formData si lo necesitas
     const formData = new FormData();
+    // Aquí puedes seguir agregando campos a formData si es necesario
+
     try {
       fields.forEach((f) => formData.append(f, newFormState[f]));
       formData.append('id', detalle?.id || '');
+
       setLoading(true);
       if (action === 'create') await createProductoDetail(formData);
       else await updateProductoDetail(formData);
+
       await fetchDetalle();
       showToast(
         `Detalle ${action === 'create' ? 'creado' : 'actualizado'} correctamente`,
         'success'
       );
+
       router.push(`/productos`);
     } catch {
       showToast(
@@ -229,8 +422,8 @@ export default function ProductPageDetail() {
   return (
     <>
       <div className="p-6 pt-0 relative">
-        <div className="flex flex-col rounded-md p-4 pl-0 pt-2  mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <div className="flex flex-col rounded-md p-4 pl-0 pt-2 mb-6">
+          <h1 className="text-2xl font-bold">
             Detalle del Producto {product?.nombre}
           </h1>
         </div>
