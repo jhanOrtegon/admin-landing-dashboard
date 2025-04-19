@@ -19,7 +19,7 @@ export async function GET() {
       LEFT JOIN 
           Tecnologias t ON vt.tecnologia_id = t.id
       GROUP BY 
-          v.id, e.nombre
+          v.id
       ORDER BY 
           v.fecha_publicacion DESC
       LIMIT 100;
