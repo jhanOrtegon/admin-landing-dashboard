@@ -140,8 +140,10 @@ export default function VacanteForm({
     formData.append('estado_id', estadoId);
 
     // Array manual
-    tecnologiaId.forEach((id) => {
-      formData.append('tecnologia_id[]', id);
+    tecnologias.forEach((id) => {
+      if (tecnologiaId.includes(id.nombre)) {
+        formData.append('tecnologia_id[]', id.id.toString());
+      }
     });
 
     try {
@@ -258,10 +260,11 @@ export default function VacanteForm({
               </Select>
             </div>
 
-            <div>
+            <div className="w-full">
               <label className="text-sm font-medium mb-1 block">
                 Tecnologías
               </label>
+
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -274,50 +277,66 @@ export default function VacanteForm({
                       : 'Seleccionar tecnologías'}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[400px] p-0">
+
+                <PopoverContent className="p-0 w-[var(--radix-popper-anchor-width)]">
                   <Command>
                     <CommandInput placeholder="Buscar tecnología..." />
-                    <CommandGroup>
-                      {tecnologias.map((tecnologia) => {
-                        const id = String(tecnologia.id);
-                        const checked = tecnologiaId.includes(id);
-                        return (
-                          <CommandItem
-                            key={id}
-                            onSelect={() => {
-                              setTecnologiaId((prev) =>
-                                prev.includes(id)
-                                  ? prev.filter((v) => v !== id)
-                                  : [...prev, id]
-                              );
-                            }}
-                            className="flex items-center justify-between"
-                          >
-                            <span>{tecnologia.nombre}</span>
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              readOnly
-                              className="rounded border-muted"
-                            />
-                          </CommandItem>
-                        );
-                      })}
-                    </CommandGroup>
+
+                    <div className="max-h-60 overflow-y-auto">
+                      <CommandGroup>
+                        {tecnologias.map((tecnologia) => {
+                          const id = String(tecnologia.id);
+                          const nombre = String(tecnologia.nombre);
+                          const checked = tecnologiaId.includes(nombre);
+
+                          return (
+                            <CommandItem
+                              key={id}
+                              onSelect={() => {
+                                setTecnologiaId((prev) =>
+                                  prev.includes(nombre)
+                                    ? prev.filter((v) => v !== nombre)
+                                    : [...prev, nombre]
+                                );
+                              }}
+                              className="flex items-center justify-between"
+                            >
+                              <span>{tecnologia.nombre}</span>
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                readOnly
+                                className="rounded border-muted"
+                              />
+                            </CommandItem>
+                          );
+                        })}
+                      </CommandGroup>
+                    </div>
                   </Command>
                 </PopoverContent>
               </Popover>
 
-              {tecnologiaId.length > 0 && (
+              {tecnologiaId.length > 0 ? (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {tecnologiaId.map((id) => {
-                    const tech = tecnologias.find((t) => String(t.id) === id);
+                  {tecnologiaId.map((nombre) => {
+                    const tech = tecnologias.find(
+                      (t) => String(t.nombre) === nombre
+                    );
                     return (
-                      <Badge key={id} variant="outline" className="capitalize">
+                      <Badge
+                        key={nombre}
+                        variant="outline"
+                        className="capitalize"
+                      >
                         {tech?.nombre}
                       </Badge>
                     );
                   })}
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2 mt-2 h-[22px] w-full">
+                  &nbsp;
                 </div>
               )}
             </div>
