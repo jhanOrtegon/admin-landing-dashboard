@@ -18,11 +18,8 @@ export async function GET() {
         p.imagen_principal,
         p.imagen_nombre_principal,
         p.carasteristicas,
-        p.estado_id,
-        e.nombre AS estado,
         p.fecha_creacion
       FROM productos p
-      JOIN estados e ON p.estado_id = e.id
       ORDER BY p.fecha_creacion DESC
       LIMIT 100;
     `;
@@ -55,8 +52,7 @@ export async function POST(req: Request) {
       descripción,
       imagen_principal,
       imagen_nombre_principal,
-      carasteristicas, // array de strings
-      estado_id
+      carasteristicas // array de strings
     } = body;
 
     if (!Array.isArray(carasteristicas)) {
@@ -74,7 +70,6 @@ export async function POST(req: Request) {
         imagen_principal,
         imagen_nombre_principal,
         carasteristicas,
-        estado_id
       ) VALUES (
         ${categoría},
         ${nombre},
@@ -83,7 +78,6 @@ export async function POST(req: Request) {
         ${imagen_principal},
         ${imagen_nombre_principal},
         ${carasteristicasPgArray}::text[],
-        ${estado_id}
       );
     `;
 

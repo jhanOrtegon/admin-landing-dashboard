@@ -17,13 +17,7 @@ import {
 } from '@/components/ui/card';
 import { Product } from './product';
 
-export function ProductsTable({
-  data,
-  estados
-}: {
-  data: TProducto[];
-  estados: { id: number; nombre: string }[];
-}) {
+export function ProductsTable({ data }: { data: TProducto[] }) {
   return (
     <Card>
       <CardHeader>
@@ -51,11 +45,7 @@ export function ProductsTable({
           </TableHeader>
           <TableBody>
             {data.map((product) => (
-              <Product
-                key={product.id}
-                product={product}
-                listEstados={estados}
-              />
+              <Product key={product.id} product={product} />
             ))}
           </TableBody>
         </Table>

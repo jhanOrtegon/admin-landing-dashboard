@@ -7,7 +7,6 @@ export async function updateVacante(formData: FormData) {
   const payload = {
     titulo: formData.get('titulo'),
     descripcion: formData.get('descripcion'),
-    estado_id: Number(formData.get('estado_id')),
     salario: Number(formData.get('salario')),
     ubicacion: formData.get('ubicacion'),
     tecnologia_id: formData

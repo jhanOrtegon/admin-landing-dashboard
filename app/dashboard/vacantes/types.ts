@@ -1,5 +1,3 @@
-import { EnumEstado } from '@/lib/models';
-
 export const nextVancies = { tags: ['vacantes'] };
 
 export type TVacante = {
@@ -8,8 +6,6 @@ export type TVacante = {
   descripcion: string;
   salario: number;
   ubicacion: string;
-  estado_id: number;
-  estado: EnumEstado;
   tecnologias: string[];
   fecha_publication: string;
 };

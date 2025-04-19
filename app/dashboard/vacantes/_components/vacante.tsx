@@ -23,11 +23,9 @@ import VacanteForm from './vacante-form';
 
 export function Vacante({
   vacante,
-  listEstados,
   listTecnologias
 }: {
   vacante: TVacante;
-  listEstados: { id: number; nombre: string }[];
   listTecnologias: { id: number; nombre: string }[];
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -72,7 +70,7 @@ export function Vacante({
         </TableCell>
         <TableCell>
           <Badge variant="outline" className="capitalize">
-            {vacante.estado}
+            {'Activo'}
           </Badge>
         </TableCell>
         <TableCell>
@@ -115,12 +113,10 @@ export function Vacante({
           descripcion: vacante.descripcion,
           salario: vacante.salario,
           ubicacion: vacante.ubicacion,
-          estado_id: String(vacante.estado_id),
           tecnologia_id: vacante.tecnologias.length
             ? vacante.tecnologias.map((t) => String(t))
             : []
         }}
-        estados={listEstados}
         tecnologias={listTecnologias}
         onSubmit={async (formData) => {
           await updateVacante(formData);

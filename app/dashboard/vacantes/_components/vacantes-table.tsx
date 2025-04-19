@@ -18,11 +18,9 @@ import { Vacante } from './vacante';
 import { TVacante } from '../types';
 
 export function VacantesTable({
-  estados,
   tecnologias,
   vacantes
 }: {
-  estados: { id: number; nombre: string }[];
   tecnologias: { id: number; nombre: string }[];
   vacantes: TVacante[];
 }) {
@@ -53,7 +51,6 @@ export function VacantesTable({
               <Vacante
                 key={vacante.id}
                 vacante={vacante}
-                listEstados={estados}
                 listTecnologias={tecnologias}
               />
             ))}

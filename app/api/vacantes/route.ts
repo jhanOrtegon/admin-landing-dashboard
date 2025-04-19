@@ -11,13 +11,9 @@ export async function GET() {
         v.descripcion, 
         v.salario, 
         v.ubicacion, 
-        v.estado_id,
-        e.nombre AS estado,
         ARRAY_AGG(t.nombre) AS tecnologias
       FROM 
           Vacantes v
-      JOIN 
-          Estados e ON v.estado_id = e.id
       LEFT JOIN 
           Vacantes_Tecnologias vt ON v.id = vt.vacante_id
       LEFT JOIN 
@@ -55,7 +51,6 @@ export async function POST(req: Request) {
       descripcion,
       salario,
       ubicacion,
-      estado_id,
       tecnologia_id // debe venir como string[] o number[]
     } = body;
 
@@ -66,13 +61,11 @@ export async function POST(req: Request) {
         descripcion,
         salario,
         ubicacion,
-        estado_id
       ) VALUES (
         ${titulo},
         ${descripcion},
         ${salario},
         ${ubicacion},
-        ${estado_id}
       )
       RETURNING id;
     `;

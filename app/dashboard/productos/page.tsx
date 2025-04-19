@@ -1,7 +1,6 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getOpciones, TOpcion } from '../../../selects/options';
 import { ProductsTable } from './_components/products-table';
 import { getProductos } from './_actions/get-product';
 import ProductForm from './_components/product-form';
@@ -15,14 +14,11 @@ export default async function VacantesPage(props: {
 
   const { productos } = await getProductos(search);
 
-  const estados = getOpciones<TOpcion>('estados');
-
   return (
     <Tabs defaultValue="all">
       <div className="flex items-center">
         <div className="ml-auto flex items-center gap-2">
           <ProductForm
-            estados={(await estados).data}
             onSubmit={async (formData) => {
               'use server';
               await createProducto(formData);
@@ -39,7 +35,7 @@ export default async function VacantesPage(props: {
       </div>
 
       <TabsContent value="all">
-        <ProductsTable data={productos} estados={(await estados).data} />
+        <ProductsTable data={productos} />
       </TabsContent>
     </Tabs>
   );

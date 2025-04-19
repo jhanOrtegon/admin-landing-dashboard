@@ -18,8 +18,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
       descripción,
       imagen_principal,
       imagen_nombre_principal,
-      carasteristicas,
-      estado_id
+      carasteristicas
     } = body;
 
     if (!Array.isArray(carasteristicas)) {
@@ -37,7 +36,6 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
         imagen_principal = ${imagen_principal},
         imagen_nombre_principal = ${imagen_nombre_principal},
         carasteristicas = ${carasteristicasPgArray}::text[],
-        estado_id = ${estado_id}
       WHERE id = ${id};
     `;
 

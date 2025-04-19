@@ -10,7 +10,6 @@ export async function createProducto(formData: FormData) {
     descripción: formData.get('descripción'),
     imagen_principal: formData.get('imagen_principal'),
     imagen_nombre_principal: formData.get('imagen_nombre_principal'),
-    estado_id: Number(formData.get('estado_id')),
     carasteristicas: formData
       .getAll('carasteristicas[]')
       .filter((v) => v !== 'null')

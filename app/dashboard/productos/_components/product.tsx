@@ -23,13 +23,7 @@ import ProductForm from './product-form';
 import { updateProducto } from '../_actions/update-product';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
-export function Product({
-  product,
-  listEstados
-}: {
-  product: TProducto;
-  listEstados: { id: number; nombre: string }[];
-}) {
+export function Product({ product }: { product: TProducto }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
@@ -93,7 +87,7 @@ export function Product({
         </TableCell> */}
         <TableCell>
           <Badge variant="outline" className="capitalize">
-            {product.estado}
+            {'Activo'}
           </Badge>
         </TableCell>
         <TableCell>
@@ -145,12 +139,10 @@ export function Product({
           descripción: product.descripción,
           imagen_principal: product.imagen_principal,
           imagen_nombre_principal: product.imagen_nombre_principal,
-          estado_id: String(product.estado_id),
           carasteristicas: product.carasteristicas.length
             ? product.carasteristicas.map((c) => String(c))
             : []
         }}
-        estados={listEstados}
         onSubmit={async (formData) => {
           await updateProducto(formData);
         }}

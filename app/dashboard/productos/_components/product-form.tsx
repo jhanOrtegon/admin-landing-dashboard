@@ -13,15 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { set, z } from 'zod';
-import { TOpcion, TOpcionResponse } from 'selects/options';
+import { z } from 'zod';
 import { Badge } from '@/components/ui/badge';
 import { useGlobalStore } from 'store/global-store';
 import { showToast } from '@/components/showToast';
@@ -37,7 +29,6 @@ const ProductSchema = z.object({
   imagen_nombre_principal: z
     .string()
     .min(1, 'El nombre de la imagen es obligatorio'),
-  estado_id: z.string().min(1, 'Seleccione un estado'),
   carasteristicas: z
     .array(z.string().min(1))
     .min(1, 'Debe agregar al menos una característica')
@@ -54,10 +45,8 @@ type Props = {
     descripción: string;
     imagen_principal: string;
     imagen_nombre_principal: string;
-    estado_id: string;
     carasteristicas: string[];
   };
-  estados: TOpcionResponse<TOpcion>['data'];
   onSubmit: (formData: FormData) => Promise<void>;
   children?: React.ReactNode;
   mode?: Mode;
@@ -67,7 +56,6 @@ type Props = {
 
 export default function ProductForm({
   defaultValues,
-  estados,
   onSubmit,
   children,
   mode = 'create',
@@ -93,7 +81,6 @@ export default function ProductForm({
   const [imagenNombre, setImagenNombre] = useState(
     defaultValues?.imagen_nombre_principal || ''
   );
-  const [estadoId, setEstadoId] = useState(defaultValues?.estado_id || '1');
   const [carasteristicas, setCarasteristicas] = useState<string[]>(
     defaultValues?.carasteristicas || []
   );
@@ -111,7 +98,6 @@ export default function ProductForm({
       descripción: descripcion,
       imagen_principal: imagenPrincipal,
       imagen_nombre_principal: imagenNombre,
-      estado_id: estadoId,
       carasteristicas
     };
 
@@ -138,7 +124,6 @@ export default function ProductForm({
     formData.append('descripción', descripcion);
     formData.append('imagen_principal', imagenPrincipal);
     formData.append('imagen_nombre_principal', imagenNombre);
-    formData.append('estado_id', estadoId);
 
     carasteristicas.forEach((c) => {
       formData.append('carasteristicas[]', c);
@@ -167,7 +152,6 @@ export default function ProductForm({
     setDescripcion('');
     setImagenPrincipal('');
     setImagenNombre('');
-    setEstadoId('1');
     setCarasteristicas([]);
     setNewCarasteristica('');
   };
@@ -254,24 +238,6 @@ export default function ProductForm({
               value={imagenNombre}
               onChange={(e) => setImagenNombre(e.target.value)}
             />
-
-            <div>
-              <label className="text-sm font-medium">
-                Estado <span className="text-red-500">*</span>
-              </label>
-              <Select value={estadoId} onValueChange={setEstadoId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Seleccione estado" />
-                </SelectTrigger>
-                <SelectContent>
-                  {estados.map((estado) => (
-                    <SelectItem key={estado.id} value={String(estado.id)}>
-                      {estado.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
 
             <div>
               <label className="text-sm font-medium mb-1 block">

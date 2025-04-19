@@ -12,7 +12,6 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
       descripcion,
       salario,
       ubicacion,
-      estado_id,
       tecnologia_id // debe ser un array de ids: string[] o number[]
     } = body;
 
@@ -23,7 +22,6 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
         descripcion = ${descripcion},
         salario = ${salario},
         ubicacion = ${ubicacion},
-        estado_id = ${estado_id}
       WHERE id = ${id};
     `;
 

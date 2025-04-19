@@ -13,13 +13,8 @@ export default async function VacantesPage(props: {
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
   const offset = searchParams.offset ?? 0;
-  const { newOffset, totalVacantes, vacantes } = await getVacantes(
-    search,
-    Number(offset),
-    10
-  );
+  const { vacantes } = await getVacantes(search, Number(offset), 10);
 
-  const estados = getOpciones<TOpcion>('estados');
   const tecnologias = getOpciones<TOpcion>('tecnologias');
 
   return (
@@ -27,7 +22,6 @@ export default async function VacantesPage(props: {
       <div className="flex items-center">
         <div className="ml-auto flex items-center gap-2">
           <VacanteForm
-            estados={(await estados).data}
             tecnologias={(await tecnologias).data}
             onSubmit={async (formData) => {
               'use server';
@@ -50,7 +44,6 @@ export default async function VacantesPage(props: {
       <TabsContent value="all">
         <VacantesTable
           vacantes={vacantes}
-          estados={(await estados).data}
           tecnologias={(await tecnologias).data}
         />
       </TabsContent>

@@ -6,18 +6,13 @@ export async function GET(request: Request) {
   const type = searchParams.get('type');
 
   try {
-    if (type === 'estados') {
-      const result = await sql`SELECT id, nombre FROM estados ORDER BY id`;
-      return NextResponse.json({ data: result });
-    }
-
     if (type === 'tecnologias') {
       const result = await sql`SELECT id, nombre FROM tecnologias ORDER BY id`;
       return NextResponse.json({ data: result });
     }
 
     return NextResponse.json(
-      { error: 'Tipo inválido. Usa ?type=estados o ?type=tecnologias' },
+      { error: 'Tipo inválido. Usa ?type=tecnologias' },
       { status: 400 }
     );
   } catch (error) {

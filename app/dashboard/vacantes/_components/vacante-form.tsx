@@ -12,14 +12,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import { z } from 'zod';
 import { TOpcion, TOpcionResponse } from 'selects/options';
 import { Badge } from '@/components/ui/badge';
@@ -38,11 +30,10 @@ import {
 } from '@/components/ui/command';
 
 export const VacanteSchema = z.object({
-  titulo: z.string().min(3, 'El título es obligatorio'),
+  titulo: z.string().min(3, 'El nombre es obligatorio'),
   descripcion: z.string().min(10, 'La descripción es obligatoria'),
   salario: z.string().regex(/^\d+$/, 'El salario debe ser un número entero'),
   ubicacion: z.string().min(2, 'La ubicación es obligatoria'),
-  estado_id: z.string().min(1, 'Seleccione un estado'),
   tecnologia_id: z
     .array(z.string())
     .min(1, 'Seleccione al menos una tecnología')
@@ -57,10 +48,8 @@ type Props = {
     descripcion: string;
     salario: number;
     ubicacion: string;
-    estado_id: string;
     tecnologia_id: string[];
   };
-  estados: TOpcionResponse<TOpcion>['data'];
   tecnologias: TOpcionResponse<TOpcion>['data'];
   onSubmit: (formData: FormData) => Promise<void>;
   children?: React.ReactNode;
@@ -71,7 +60,6 @@ type Props = {
 
 export default function VacanteForm({
   defaultValues,
-  estados,
   tecnologias,
   onSubmit,
   children,
@@ -88,14 +76,19 @@ export default function VacanteForm({
   const router = useRouter();
 
   const [titulo, setTitulo] = useState(defaultValues?.titulo || '');
+
   const [descripcion, setDescripcion] = useState(
     defaultValues?.descripcion || ''
   );
+
   const [salario, setSalario] = useState(
     defaultValues?.salario?.toString() || ''
   );
-  const [ubicacion, setUbicacion] = useState(defaultValues?.ubicacion || '');
-  const [estadoId, setEstadoId] = useState(defaultValues?.estado_id || '1');
+
+  const [ubicacion, setUbicacion] = useState(
+    defaultValues?.ubicacion || 'Barranquilla'
+  );
+
   const [tecnologiaId, setTecnologiaId] = useState<string[]>(
     defaultValues?.tecnologia_id || []
   );
@@ -112,7 +105,6 @@ export default function VacanteForm({
       descripcion,
       salario: cleanSalario,
       ubicacion,
-      estado_id: estadoId,
       tecnologia_id: tecnologiaId
     };
 
@@ -137,7 +129,6 @@ export default function VacanteForm({
     formData.append('descripcion', descripcion);
     formData.append('salario', cleanSalario);
     formData.append('ubicacion', ubicacion);
-    formData.append('estado_id', estadoId);
 
     // Array manual
     tecnologias.forEach((id) => {
@@ -170,7 +161,6 @@ export default function VacanteForm({
         setDescripcion(defaultValues.descripcion || '');
         setSalario(defaultValues.salario?.toString() || '');
         setUbicacion(defaultValues.ubicacion || '');
-        setEstadoId(defaultValues.estado_id || '1');
         setTecnologiaId(defaultValues.tecnologia_id || []);
       }
     } else {
@@ -179,7 +169,6 @@ export default function VacanteForm({
       setDescripcion('');
       setSalario('');
       setUbicacion('');
-      setEstadoId('1');
       setTecnologiaId([]);
     }
   }, [modalOpen, defaultValues]);
@@ -203,7 +192,7 @@ export default function VacanteForm({
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <Input
-              label="Título"
+              label="Nombre"
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
             />
@@ -236,29 +225,13 @@ export default function VacanteForm({
               )}
             </div>
 
-            <div>
+            {/* <div>
               <label className="text-sm font-medium">Ubicación</label>
               <Input
                 value={ubicacion}
                 onChange={(e) => setUbicacion(e.target.value)}
               />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium">Estado</label>
-              <Select value={estadoId} onValueChange={setEstadoId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Seleccione estado" />
-                </SelectTrigger>
-                <SelectContent>
-                  {estados.map((estado) => (
-                    <SelectItem key={estado.id} value={String(estado.id)}>
-                      {estado.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            </div> */}
 
             <div className="w-full">
               <label className="text-sm font-medium mb-1 block">
