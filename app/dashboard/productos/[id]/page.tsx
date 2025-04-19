@@ -131,7 +131,7 @@ export default function ProductPageDetail() {
         ...segundoBloqueParsed,
         artículos: articulosFormateados
       })
-    };
+    } as any;
 
     const formData = new FormData();
     try {
