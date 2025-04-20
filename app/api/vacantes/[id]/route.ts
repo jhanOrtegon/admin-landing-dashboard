@@ -17,11 +17,11 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
 
     // 1. Actualizar la vacante
     await sql`
-      UPDATE Vacantes SET
+      UPDATE vacantes SET
         titulo = ${titulo},
         descripcion = ${descripcion},
         salario = ${salario},
-        ubicacion = ${ubicacion},
+        ubicacion = ${ubicacion}
       WHERE id = ${id};
     `;
 
