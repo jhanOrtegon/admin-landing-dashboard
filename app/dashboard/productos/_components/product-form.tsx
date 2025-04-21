@@ -234,7 +234,7 @@ export default function ProductForm({
             <Input
               required
               withAsterisk
-              label="Nombre del archivo"
+              label="Imagen logotipo (URL)"
               value={imagenNombre}
               onChange={(e) => setImagenNombre(e.target.value)}
             />
