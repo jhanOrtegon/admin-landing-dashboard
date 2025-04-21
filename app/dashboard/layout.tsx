@@ -122,7 +122,7 @@ function DashboardBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/">Inicio</Link>
+            <Link href="/dasboard">Inicio</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
