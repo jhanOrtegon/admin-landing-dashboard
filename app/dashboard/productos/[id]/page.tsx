@@ -359,9 +359,9 @@ export default function ProductPageDetail() {
     // 2. Intercambiar nombre y url_imagen en cada artículo
     const articulosFormateados = segundoBloqueParsed.artículos.map(
       (a: any) => ({
-        ...a,
-        url_imagen: a.nombre,
-        nombre: a.url_imagen
+        ...a
+        // url_imagen: a.nombre,
+        // nombre: a.url_imagen
       })
     );
 
