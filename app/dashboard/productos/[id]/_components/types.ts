@@ -126,21 +126,26 @@ export const dataInitial = {
     artículos: [
       {
         id: 'a1',
-        nombre: 'Interoperabilidad',
+        nombre:
+          'https://www.ttncompany.com/static/media/biowelImage4.2727749d6b01dc94cbdcedaefa867634.svg',
         texto: 'Conexión eficiente entre sistemas clínicos y administrativos.',
-        url_imagen: 'https://www.ttncompany.com/static/media/icono1.png'
+        url_imagen: 'Lleva el control de tus finanzas'
       },
       {
         id: 'a2',
-        nombre: 'Escalabilidad',
-        texto: 'Adapta el sistema al crecimiento de tu empresa.',
-        url_imagen: 'https://www.ttncompany.com/static/media/icono2.png'
+        nombre:
+          'https://www.ttncompany.com/static/media/biowelImage4.2727749d6b01dc94cbdcedaefa867634.svg',
+        texto:
+          'Para reducir la cantidad de pasos y crea un flujo de trabajo más cómodo para ti y tu equipo de trabajo',
+        url_imagen: 'Organiza tu estructura de trabajo'
       },
       {
         id: 'a3',
-        nombre: 'Soporte técnico',
-        texto: 'Equipo especializado disponible para apoyarte.',
-        url_imagen: 'https://www.ttncompany.com/static/media/icono3.png'
+        nombre:
+          'https://www.ttncompany.com/static/media/biowelImage5.c79e83f6d25f1389ca58fc655b80f253.svg',
+        texto:
+          'Disminuye los estancamientos, errores y pérdida de información valiosa ',
+        url_imagen: 'Simplifica y evita reprocesos'
       }
     ]
   }),
@@ -212,14 +217,52 @@ export const dataInitial = {
     tabs: [
       {
         id: 'q1',
-        titulo: '¿Biowel se integra con otros sistemas?',
+        titulo: '¿Biowel permite gestionar historias clínicas oftalmológicas?',
         texto:
-          'Sí, se integra con sistemas contables y clínicos a través de API REST.'
+          'Sí, Biowel permite registrar y consultar historias clínicas específicas para oftalmología, incluyendo agudeza visual, refracción, presión intraocular y diagnósticos como miopía, astigmatismo o glaucoma.'
       },
       {
         id: 'q2',
-        titulo: '¿Qué soporte ofrecen?',
-        texto: 'Contamos con soporte técnico 24/7 y capacitación incluida.'
+        titulo: '¿Puedo registrar la fórmula de lentes para cada paciente?',
+        texto:
+          'Claro, el sistema permite registrar fórmulas ópticas con detalle: esfera, cilindro, eje, adición y tipo de lente para cada ojo.'
+      },
+      {
+        id: 'q3',
+        titulo: '¿Se pueden generar órdenes de laboratorio óptico?',
+        texto:
+          'Sí, desde la historia clínica se pueden generar órdenes para laboratorios ópticos con todos los parámetros necesarios para la fabricación de lentes.'
+      },
+      {
+        id: 'q4',
+        titulo: '¿Cuenta con integración con equipos oftalmológicos?',
+        texto:
+          'Biowel permite integrar resultados de autorefractómetros, tonómetros y otros dispositivos mediante archivos o conexiones compatibles con HL7 o formatos estándar.'
+      },
+      {
+        id: 'q5',
+        titulo:
+          '¿El sistema permite agendar consultas de optometría y oftalmología?',
+        texto:
+          'Sí, incluye un módulo de agenda donde se pueden programar citas diferenciando entre consultas de optometría, oftalmología, procedimientos y seguimientos.'
+      },
+      {
+        id: 'q6',
+        titulo: '¿Se pueden cargar imágenes oculares?',
+        texto:
+          'Sí, puedes adjuntar imágenes clínicas como fondo de ojo, segmento anterior, OCT o fotografías de cámara retinal directamente en la historia clínica.'
+      },
+      {
+        id: 'q7',
+        titulo: '¿El sistema emite reportes para control clínico?',
+        texto:
+          'Genera reportes detallados de evolución clínica, estadísticas de diagnósticos, tratamientos aplicados y control de calidad visual a lo largo del tiempo.'
+      },
+      {
+        id: 'q8',
+        titulo: '¿Biowel cumple con normativas de salud?',
+        texto:
+          'Sí, cumple con estándares como HIPAA y normativas locales para manejo seguro de información médica y protección de datos personales.'
       }
     ]
   }),
