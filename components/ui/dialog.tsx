@@ -36,22 +36,29 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         'fixed left-1/2 top-1/2 z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 sm:rounded-lg',
-        'max-h-[80vh] flex flex-col', // ✅ estructura para header, scroll, footer
+        'max-h-[80vh] flex flex-col',
         'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
         className
       )}
       {...props}
     >
       <div className="flex-0 px-6 pt-6">
-        {/* Aquí se espera que uses <DialogHeader> */}
+        <DialogHeader className="space-y-1.5 text-center sm:text-left" />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-thin scrollbar-thumb-muted-foreground/30 scrollbar-thumb-rounded-md">
+      <div
+        className={cn(
+          'flex-1 overflow-y-auto px-6 py-4',
+          'scrollbar-thin scrollbar-thumb-transparent hover:scrollbar-thumb-muted-foreground/30',
+          'scrollbar-thumb-rounded-md scrollbar-track-transparent',
+          'transition-colors duration-300'
+        )}
+      >
         {children}
       </div>
 
       <div className="flex-0 px-6 pb-6">
-        {/* Aquí se espera que uses <DialogFooter> */}
+        <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-center sm:space-x-2" />
       </div>
 
       <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">

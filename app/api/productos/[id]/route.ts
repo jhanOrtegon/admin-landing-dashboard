@@ -35,7 +35,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
         "descripción" = ${descripción},
         imagen_principal = ${imagen_principal},
         imagen_nombre_principal = ${imagen_nombre_principal},
-        carasteristicas = ${carasteristicasPgArray}::text[],
+        carasteristicas = ${carasteristicasPgArray}::text[]
       WHERE id = ${id};
     `;
 
