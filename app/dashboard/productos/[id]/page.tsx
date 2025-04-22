@@ -14,7 +14,7 @@ import { deleteProductoDetail } from './_actions/delete-product-detail';
 import { useParams, useRouter } from 'next/navigation';
 
 import { getProductos } from '../_actions/get-product';
-import { emptyProductDetailSections } from './_components/types';
+import { dataInitial, emptyProductDetailSections } from './_components/types';
 import { sectionSchemas } from './_schemas/schemas';
 import { TProducto } from '../types';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -68,11 +68,11 @@ export default function ProductPageDetail() {
       } else {
         const mapped: Record<string, string> = {};
         // const current = emptyProductDetailSections as any;
-        const current = dataIniital as any;
+        const current = dataInitial as any;
 
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
         // setFormState({ ...mapped, product_id: product?.id.toString() });
-        setFormState({ ...dataIniital });
+        setFormState({ ...dataInitial });
       }
     } catch {
       showToast('Error al consultar el detalle', 'error');
