@@ -126,26 +126,26 @@ export const dataInitial = {
     artículos: [
       {
         id: 'a1',
-        nombre:
-          'https://www.ttncompany.com/static/media/biowelImage4.2727749d6b01dc94cbdcedaefa867634.svg',
+        nombre: 'Lleva el control de tus finanzas',
         texto: 'Conexión eficiente entre sistemas clínicos y administrativos.',
-        url_imagen: 'Lleva el control de tus finanzas'
+        url_imagen:
+          'https://www.ttncompany.com/static/media/biowelImage4.2727749d6b01dc94cbdcedaefa867634.svg'
       },
       {
         id: 'a2',
-        nombre:
-          'https://www.ttncompany.com/static/media/biowelImage4.2727749d6b01dc94cbdcedaefa867634.svg',
+        nombre: 'Organiza tu estructura de trabajo',
         texto:
           'Para reducir la cantidad de pasos y crea un flujo de trabajo más cómodo para ti y tu equipo de trabajo',
-        url_imagen: 'Organiza tu estructura de trabajo'
+        url_imagen:
+          'https://www.ttncompany.com/static/media/biowelImage4.2727749d6b01dc94cbdcedaefa867634.svg'
       },
       {
         id: 'a3',
-        nombre:
-          'https://www.ttncompany.com/static/media/biowelImage5.c79e83f6d25f1389ca58fc655b80f253.svg',
+        nombre: 'Simplifica y evita reprocesos',
         texto:
           'Disminuye los estancamientos, errores y pérdida de información valiosa ',
-        url_imagen: 'Simplifica y evita reprocesos'
+        url_imagen:
+          'https://www.ttncompany.com/static/media/biowelImage5.c79e83f6d25f1389ca58fc655b80f253.svg'
       }
     ]
   }),
