@@ -30,7 +30,6 @@ export default function ProductPageDetail() {
   const [globalErrors, setGlobalErrors] = useState<Record<string, string>>({});
 
   const [product, setProduct] = useState<TProducto>();
-  console.log(product, 'xxx');
 
   useMemo(async () => {
     const product = await getProductos('');
