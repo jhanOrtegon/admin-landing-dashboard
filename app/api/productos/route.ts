@@ -69,7 +69,7 @@ export async function POST(req: Request) {
         descripción,
         imagen_principal,
         imagen_nombre_principal,
-        carasteristicas,
+        carasteristicas
       ) VALUES (
         ${categoría},
         ${nombre},
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
         ${descripción},
         ${imagen_principal},
         ${imagen_nombre_principal},
-        ${carasteristicasPgArray}::text[],
+        ${carasteristicasPgArray}::text[]
       );
     `;
 
