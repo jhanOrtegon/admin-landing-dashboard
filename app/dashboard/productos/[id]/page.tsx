@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -67,12 +67,12 @@ export default function ProductPageDetail() {
         setFormState({ ...mapped, product_id: product?.id.toString() });
       } else {
         const mapped: Record<string, string> = {};
-        const current = emptyProductDetailSections as any;
-        // const current = dataIniital as any;
+        // const current = emptyProductDetailSections as any;
+        const current = dataIniital as any;
 
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
-        setFormState({ ...mapped, product_id: product?.id.toString() });
-        // setFormState({ ...dataIniital });
+        // setFormState({ ...mapped, product_id: product?.id.toString() });
+        setFormState({ ...dataIniital });
       }
     } catch {
       showToast('Error al consultar el detalle', 'error');

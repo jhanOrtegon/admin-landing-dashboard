@@ -95,22 +95,143 @@ export const emptyProductDetailSections = {
   }
 };
 
-export const dataIniital = {
-  banner:
-    '{"id":"8c1c071d-d0cd-481f-b429-51d9d32feb8f","url_imagen":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","url_logotipo":"https://www.ttncompany.com/static/media/logoBioAdmi.bc753d5742dcce769a86b68de03f714d.svg","nombre":"Administración y finanzas corporativas","texto":"Plataforma para el control administrativo y financiero de tu empresa. Visibilidad total sobre la operación en tiempo real. Modular y escalable. Incluye:","carasteristicas":["Gestión contable integrada","Control presupuestal y tesorería","Administración de proveedores","Reportes financieros dinámicos"]}',
-  primer_bloque:
-    '{"id":"253f8412-430d-40f1-b391-7103eb2a5e02","nombre":"¿Qué es Biowel?","texto":"Plataforma para el control administrativo y financiero de tu empresa. Visibilidad total sobre la operación en tiempo real. Modular y escalable. Incluye:\\n\\nPlataforma para el control administrativo y financiero de tu empresa. Visibilidad total sobre la operación en tiempo real. Modular y escalable. Incluye:","primera_url_imagen":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","segunda_url_imagen":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png"}',
-  segundo_bloque:
-    '{"id":"511c9927-eb64-4e26-aaf0-686d1a278389","categoria":"Diseñado para el sector de la salud","nombre":"Beneficios","artículos":[{"id":"d2d15c26-6ca2-4e77-9827-ac956c2c342a","nombre":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","texto":"Este beneficio ayuda a mejorar procesos clave.","url_imagen":"Gestión contable integrada"},{"id":"c77b9986-db49-41ee-8de3-34b82cdb17c8","nombre":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","texto":"Este beneficio ayuda a mejorar procesos clave.","url_imagen":"Gestión contable integrada"}]}',
-  tercer_bloque:
-    '{"id":"b757f291-cc64-480a-8558-ccbacf128e66","categoria":"Aplicaciones","nombre":"Centraliza procesos internos con un solo sistema","url_imagen":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","carasteristicas":["Gestión contable integrada","Control presupuestal y tesorería","Administración de proveedores","Reportes financieros dinámicos"]}',
-  cuarto_bloque:
-    '{"id":"ba295a22-e14c-410d-95d8-2f48605a2a24","categoria":"Gestión","nombre":"Controla tus recursos empresariales","texto":"Conoce el estado actual de tus recursos, tu inventario y tus colaboradores con biowel","url_imagen":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","tabs":[{"id":"38dd121b-cc80-4ea0-b61f-f5be9806518a","titulo":"Gerencial","texto":"Entérate en tiempo real de lo que sucede con los informes estadísticos gerenciales.","carasteristicas":["Monitorización de indicadores por área.","Resultados en tiempo real."]},{"id":"48dd121b-cc80-4ea0-b61f-f5be9806518a","titulo":"Asistencial","texto":"Entérate en tiempo real de lo que sucede con los informes estadísticos Asistencial.","carasteristicas":["Monitorización de indicadores por área.","Resultados en tiempo real Asistencial."]}]}',
-  quinto_bloque:
-    '{"id":"9123509d-c19d-4886-927c-ddff474412c5","categoria":"Finanzas","nombre":"Sistematiza tus procesos financieros","texto":"Conoce el estado actual de tus recursos, tu inventario y tus colaboradores con biowel\\n\\n","url_imagen":"https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","tabs":[{"id":"f1d43e8d-ba23-42ce-af0e-800b79d4cf87","titulo":"Gerencial","texto":"Entérate en tiempo real de lo que sucede con los informes estadísticos gerenciales.","carasteristicas":["Monitorización de indicadores por área.","Monitorización de indicadores por área 2025."]}, {"id":"f2d43e8d-ba23-42ce-af0e-800b79d4cf87","titulo":"Gerencial","texto":"Entérate en tiempo real de lo que sucede con los informes estadísticos gerenciales.","carasteristicas":["Monitorización de indicadores por área.","Monitorización de indicadores por área 2025."]}]}',
-  preguntas:
-    '{"id":"30a6a9e8-ee72-46b5-ac90-280852841481","categoria":"F.A.Q.","nombre":"Preguntas frecuentes","tabs":[{"id":"e2e6be93-3113-49f8-9ccd-f9a0040f1bd2","titulo":"como se hace una app","texto":"Lorem ipsum dolor sit amet, consectetur adipiscing xxxxxxx"}]}',
-  apoyo:
-    '{"id":"be0763b1-8222-44ba-b26d-d4a8dff4b05b","categoria":"Proyecto ganador.","nombre":"Desarrollado con el apoyo de","urls":["https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png","https://www.ttncompany.com/static/media/biowelLogo.f65902073cb99c71b676.png"]}',
+export const dataInitial = {
+  banner: JSON.stringify({
+    id: '8c1c071d-d0cd-481f-b429-51d9d32feb8f',
+    url_imagen: 'https://www.ttncompany.com/static/media/banner.biowel.png',
+    url_logotipo: 'https://www.ttncompany.com/static/media/logoBioAdmi.svg',
+    nombre: 'Administración y Finanzas',
+    texto: 'Plataforma para la gestión operativa, administrativa y financiera.',
+    carasteristicas: [
+      'Gestión contable integrada',
+      'Control presupuestal y tesorería',
+      'Administración de proveedores',
+      'Reportes financieros dinámicos'
+    ]
+  }),
+  primer_bloque: JSON.stringify({
+    id: '253f8412-430d-40f1-b391-7103eb2a5e02',
+    nombre: '¿Qué es Biowel?',
+    texto:
+      'Biowel es una plataforma modular que te da control total sobre la operación de tu empresa.',
+    primera_url_imagen:
+      'https://www.ttncompany.com/static/media/biowel_intro_1.png',
+    segunda_url_imagen:
+      'https://www.ttncompany.com/static/media/biowel_intro_2.png'
+  }),
+  segundo_bloque: JSON.stringify({
+    id: '511c9927-eb64-4e26-aaf0-686d1a278389',
+    categoria: 'Diseñado para la salud',
+    nombre: 'Beneficios',
+    artículos: [
+      {
+        id: 'a1',
+        nombre: 'Interoperabilidad',
+        texto: 'Conexión eficiente entre sistemas clínicos y administrativos.',
+        url_imagen: 'https://www.ttncompany.com/static/media/icono1.png'
+      },
+      {
+        id: 'a2',
+        nombre: 'Escalabilidad',
+        texto: 'Adapta el sistema al crecimiento de tu empresa.',
+        url_imagen: 'https://www.ttncompany.com/static/media/icono2.png'
+      },
+      {
+        id: 'a3',
+        nombre: 'Soporte técnico',
+        texto: 'Equipo especializado disponible para apoyarte.',
+        url_imagen: 'https://www.ttncompany.com/static/media/icono3.png'
+      }
+    ]
+  }),
+  tercer_bloque: JSON.stringify({
+    id: 'b757f291-cc64-480a-8558-ccbacf128e66',
+    categoria: 'Aplicaciones',
+    nombre: 'Centraliza procesos con un solo sistema',
+    url_imagen:
+      'https://www.ttncompany.com/static/media/aplicaciones_biowel.png',
+    carasteristicas: [
+      'Gestión documental',
+      'Módulo de compras y almacén',
+      'Control de inventarios',
+      'Gestión del talento humano',
+      'Indicadores financieros clave',
+      'Conectividad entre sedes'
+    ]
+  }),
+  cuarto_bloque: JSON.stringify({
+    id: 'ba295a22-e14c-410d-95d8-2f48605a2a24',
+    categoria: 'Gestión',
+    nombre: 'Controla tus recursos',
+    texto:
+      'Accede en tiempo real al estado de tus recursos y áreas operativas.',
+    url_imagen: 'https://www.ttncompany.com/static/media/gestion_biowel.png',
+    tabs: [
+      {
+        id: 't1',
+        titulo: 'Inventario',
+        texto: 'Gestiona el inventario con trazabilidad y alertas automáticas.',
+        carasteristicas: ['Alertas de stock', 'Inventario por sede']
+      },
+      {
+        id: 't2',
+        titulo: 'Recursos Humanos',
+        texto: 'Administra tu personal y controla la nómina.',
+        carasteristicas: ['Control de turnos', 'Cálculo automático de nómina']
+      }
+    ]
+  }),
+  quinto_bloque: JSON.stringify({
+    id: '9123509d-c19d-4886-927c-ddff474412c5',
+    categoria: 'Finanzas',
+    nombre: 'Sistematiza tus procesos financieros',
+    texto: 'Administra presupuestos, pagos, egresos e ingresos con eficiencia.',
+    url_imagen: 'https://www.ttncompany.com/static/media/finanzas_biowel.png',
+    tabs: [
+      {
+        id: 't3',
+        titulo: 'Presupuesto',
+        texto: 'Crea y controla presupuestos anuales y mensuales.',
+        carasteristicas: [
+          'Proyecciones financieras',
+          'Comparación gasto vs. presupuesto'
+        ]
+      },
+      {
+        id: 't4',
+        titulo: 'Tesorería',
+        texto: 'Controla ingresos, egresos y flujos de caja.',
+        carasteristicas: ['Módulo de pagos', 'Conciliación bancaria']
+      }
+    ]
+  }),
+  preguntas: JSON.stringify({
+    id: '30a6a9e8-ee72-46b5-ac90-280852841481',
+    categoria: 'Preguntas frecuentes',
+    nombre: 'FAQ',
+    tabs: [
+      {
+        id: 'q1',
+        titulo: '¿Biowel se integra con otros sistemas?',
+        texto:
+          'Sí, se integra con sistemas contables y clínicos a través de API REST.'
+      },
+      {
+        id: 'q2',
+        titulo: '¿Qué soporte ofrecen?',
+        texto: 'Contamos con soporte técnico 24/7 y capacitación incluida.'
+      }
+    ]
+  }),
+  apoyo: JSON.stringify({
+    id: 'be0763b1-8222-44ba-b26d-d4a8dff4b05b',
+    categoria: 'Aliados',
+    nombre: 'Desarrollado con el apoyo de:',
+    urls: [
+      'https://www.ttncompany.com/static/media/icono_sena.png',
+      'https://www.ttncompany.com/static/media/icono_mincomercio.png',
+      'https://www.ttncompany.com/static/media/icono_colciencias.png'
+    ]
+  }),
   product_id: '9'
 };
