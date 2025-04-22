@@ -33,6 +33,12 @@ export const emptyProductDetailSections = {
         nombre: '',
         texto: '',
         url_imagen: ''
+      },
+      {
+        id: randomId(),
+        nombre: '',
+        texto: '',
+        url_imagen: ''
       }
     ]
   },
@@ -41,7 +47,7 @@ export const emptyProductDetailSections = {
     categoria: '',
     nombre: '',
     url_imagen: '',
-    carasteristicas: ['', '', '', '']
+    carasteristicas: ['', '', '', '', '', '']
   },
   cuarto_bloque: {
     id: randomId(),
