@@ -40,7 +40,7 @@ export default function DashboardLayout({
               <DashboardBreadcrumb />
             </header>
           )}
-          <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40">
+          <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40 !pb-8">
             {children}
           </main>
         </div>
@@ -120,11 +120,11 @@ function DashboardBreadcrumb() {
   return (
     <Breadcrumb className="hidden md:flex">
       <BreadcrumbList>
-        <BreadcrumbItem>
+        {/* <BreadcrumbItem>
           <BreadcrumbLink asChild>
             <Link href="/dashboard">Inicio</Link>
           </BreadcrumbLink>
-        </BreadcrumbItem>
+        </BreadcrumbItem> */}
 
         {segments.map((segment, index) => {
           const href = '/' + segments.slice(0, index + 1).join('/');
@@ -133,7 +133,7 @@ function DashboardBreadcrumb() {
 
           return (
             <div key={index} className="flex items-center">
-              <BreadcrumbSeparator />
+              {index !== 0 && <BreadcrumbSeparator />}
               <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage>{label}</BreadcrumbPage>

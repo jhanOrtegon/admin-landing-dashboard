@@ -192,11 +192,13 @@ export default function VacanteForm({
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <Input
+              required
               label="Nombre"
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
             />
             <Textarea
+              required
               label="Descripción"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
@@ -206,6 +208,7 @@ export default function VacanteForm({
             <div>
               <label className="text-sm font-medium">Salario</label>
               <Input
+                required
                 inputMode="numeric"
                 pattern="[0-9]*"
                 value={salario}

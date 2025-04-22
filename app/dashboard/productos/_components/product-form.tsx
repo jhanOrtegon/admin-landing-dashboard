@@ -213,7 +213,7 @@ export default function ProductForm({
             <Input
               required
               withAsterisk
-              label="Titulo"
+              label="Título"
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
             />

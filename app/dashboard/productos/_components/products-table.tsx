@@ -32,7 +32,7 @@ export function ProductsTable({ data }: { data: TProducto[] }) {
             <TableRow>
               <TableHead>Id</TableHead>
               <TableHead>Nombre</TableHead>
-              <TableHead>Categoria</TableHead>
+              <TableHead>Categoría</TableHead>
               <TableHead className="text-center">Imagen nombre (URL)</TableHead>
               <TableHead className="text-center">
                 Imagen principal (URL)

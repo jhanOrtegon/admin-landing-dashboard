@@ -153,18 +153,21 @@ export default function EquipoForm({
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <Input
+              required
               label="Nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
             />
 
             <Input
+              required
               label="Cargo"
               value={cargo}
               onChange={(e) => setCargo(e.target.value)}
             />
 
             <Textarea
+              required
               label="Descripción"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
@@ -172,6 +175,7 @@ export default function EquipoForm({
             />
 
             <Input
+              required
               label="URL de la imagen"
               value={urlImage}
               onChange={(e) => setUrlImage(e.target.value)}
