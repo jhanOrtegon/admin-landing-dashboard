@@ -8,7 +8,7 @@ export async function GET() {
     const result = await sql`
       SELECT id, url_image, nombre, descripcion, cargo
       FROM equipo
-      ORDER BY id DESC
+      ORDER BY id ASC
       LIMIT 100;
     `;
 
