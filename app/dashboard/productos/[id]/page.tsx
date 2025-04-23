@@ -299,13 +299,13 @@ export default function ProductPageDetail() {
                         >
                           <Input
                             withAsterisk
+                            value={v.nombre}
                             label={`nombre ${i + 1}`}
-                            value={v.url_imagen}
                             onChange={(e) => {
                               const updated = [...value];
                               updated[i] = {
                                 ...updated[i],
-                                url_imagen: e.target.value
+                                nombre: e.target.value
                               };
                               handleChange(sectionKey, key, updated);
                             }}
@@ -325,13 +325,13 @@ export default function ProductPageDetail() {
                           />
                           <Input
                             withAsterisk
+                            value={v.url_imagen}
                             label={`url_imagen ${i + 1}`}
-                            value={v.nombre}
                             onChange={(e) => {
                               const updated = [...value];
                               updated[i] = {
                                 ...updated[i],
-                                nombre: e.target.value
+                                url_imagen: e.target.value
                               };
                               handleChange(sectionKey, key, updated);
                             }}
