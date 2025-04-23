@@ -22,8 +22,15 @@ import { deleteProducto } from '../_actions/delete-product';
 import ProductForm from './product-form';
 import { updateProducto } from '../_actions/update-product';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { TLang } from '@/lib/models';
 
-export function Product({ product }: { product: TProducto }) {
+export function Product({
+  product,
+  lang = 'ES'
+}: {
+  product: TProducto;
+  lang?: TLang;
+}) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const setLoading = useGlobalStore((state) => state.setLoading);
@@ -73,18 +80,7 @@ export function Product({ product }: { product: TProducto }) {
             />
           </div>
         </TableCell>
-        {/* <TableCell className="font-medium">
-          <div className="flex gap-2 items-center max-w-sm flex-wrap">
-            {product.tecnologias.map((tecnologia) => (
-              <Badge key={tecnologia} variant="outline" className="capitalize">
-                {tecnologia}
-              </Badge>
-            ))}
-          </div>
-        </TableCell> */}
-        {/* <TableCell className="font-medium max-w-md">
-          {product.descripcion}
-        </TableCell> */}
+
         <TableCell>
           <Badge variant="outline" className="capitalize">
             {'Activo'}
@@ -144,7 +140,7 @@ export function Product({ product }: { product: TProducto }) {
             : []
         }}
         onSubmit={async (formData) => {
-          await updateProducto(formData);
+          await updateProducto(formData, lang);
         }}
       />
     </>

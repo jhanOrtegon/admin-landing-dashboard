@@ -95,6 +95,7 @@ export default function EquipoForm({
     if (defaultValues?.id) {
       formData.append('id', String(defaultValues.id));
     }
+
     formData.append('nombre', nombre);
     formData.append('descripcion', descripcion);
     formData.append('cargo', cargo);

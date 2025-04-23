@@ -10,18 +10,19 @@ export async function GET() {
         v.titulo, 
         v.descripcion, 
         v.salario, 
-        v.ubicacion, 
+        v.ubicacion,
+        v.lang,
         ARRAY_AGG(t.nombre) AS tecnologias
       FROM 
-          Vacantes v
+        Vacantes v
       LEFT JOIN 
-          Vacantes_Tecnologias vt ON v.id = vt.vacante_id
+        Vacantes_Tecnologias vt ON v.id = vt.vacante_id
       LEFT JOIN 
-          Tecnologias t ON vt.tecnologia_id = t.id
+        Tecnologias t ON vt.tecnologia_id = t.id
       GROUP BY 
-          v.id
+        v.id
       ORDER BY 
-          v.fecha_publicacion DESC
+        v.fecha_publicacion DESC
       LIMIT 100;
     `;
 
@@ -51,28 +52,39 @@ export async function POST(req: Request) {
       descripcion,
       salario,
       ubicacion,
-      tecnologia_id // debe venir como string[] o number[]
+      tecnologia_id, // string[] o number[]
+      lang = 'ES' // valor por defecto si no viene
     } = body;
 
-    // 1. Insertar la vacante y retornar el ID
+    // ✅ Validación de lang
+    if (!['ES', 'EN'].includes(lang)) {
+      return NextResponse.json(
+        { status: 'error', message: 'Idioma no válido. Solo ES o EN' },
+        { status: 400 }
+      );
+    }
+
+    // 1. Insertar vacante
     const result = await sql`
       INSERT INTO Vacantes (
         titulo,
         descripcion,
         salario,
-        ubicacion
+        ubicacion,
+        lang
       ) VALUES (
         ${titulo},
         ${descripcion},
         ${salario},
-        ${ubicacion}
+        ${ubicacion},
+        ${lang}
       )
       RETURNING id;
     `;
 
     const vacanteId = result[0]?.id;
 
-    // 2. Insertar tecnologías asociadas si existen
+    // 2. Insertar tecnologías
     if (Array.isArray(tecnologia_id) && tecnologia_id.length > 0 && vacanteId) {
       const values: any[] = [];
       const placeholders: string[] = [];
@@ -91,8 +103,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. Revalidar caché si aplica
-    revalidateTag('vacantes');
+    // 3. Revalidar caché
+    revalidateTag(`vacantes-${lang}`);
 
     return NextResponse.json({ status: 'ok', message: 'Vacante creada' });
   } catch (error) {

@@ -1,5 +1,8 @@
+import { TLang } from '@/lib/models';
+
 export type TProducto = {
   id: number;
+  lang: TLang;
   categoría: string;
   nombre: string;
   slug: string;

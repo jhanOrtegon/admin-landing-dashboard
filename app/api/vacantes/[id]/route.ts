@@ -12,26 +12,36 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
       descripcion,
       salario,
       ubicacion,
-      tecnologia_id // debe ser un array de ids: string[] o number[]
+      tecnologia_id, // string[] o number[]
+      lang // nuevo campo a soportar
     } = body;
 
-    // 1. Actualizar la vacante
+    // Validar lang si viene
+    if (lang && !['ES', 'EN'].includes(lang)) {
+      return NextResponse.json(
+        { status: 'error', message: 'Idioma no válido. Solo ES o EN' },
+        { status: 400 }
+      );
+    }
+
+    // 1. Actualizar vacante
     await sql`
       UPDATE vacantes SET
         titulo = ${titulo},
         descripcion = ${descripcion},
         salario = ${salario},
-        ubicacion = ${ubicacion}
+        ubicacion = ${ubicacion},
+        lang = ${lang ?? 'ES'}
       WHERE id = ${id};
     `;
 
-    // 2. Eliminar tecnologías actuales asociadas
+    // 2. Eliminar tecnologías actuales
     await sql`
       DELETE FROM vacantes_tecnologias
       WHERE vacante_id = ${id};
     `;
 
-    // 3. Insertar nuevas tecnologías (si hay)
+    // 3. Insertar nuevas tecnologías
     if (Array.isArray(tecnologia_id) && tecnologia_id.length > 0) {
       const values: any[] = [];
       const placeholders: string[] = [];
@@ -45,14 +55,14 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
         `
           INSERT INTO vacantes_tecnologias (vacante_id, tecnologia_id)
           VALUES ${placeholders.join(', ')}
-       `,
+        `,
         values
       );
     }
 
     // 4. Revalidar caché
-    revalidateTag(`vacante-${id}`);
-    revalidateTag('vacantes');
+    revalidateTag(`vacante-${id}-${lang}`);
+    revalidateTag(`vacantes-${lang}`);
 
     return NextResponse.json({ status: 'ok', message: 'Vacante actualizada' });
   } catch (error) {

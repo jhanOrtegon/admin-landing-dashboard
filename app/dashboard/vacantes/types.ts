@@ -1,7 +1,10 @@
+import { TLang } from '@/lib/models';
+
 export const nextVancies = { tags: ['vacantes'] };
 
 export type TVacante = {
   id: number;
+  lang: TLang;
   titulo: string;
   descripcion: string;
   salario: number;

@@ -20,8 +20,15 @@ import { TEquipo } from '../types';
 import { deleteEquipo } from '../_actions/delete-team';
 import EquipoForm from './equipo-form';
 import { updateEquipo } from '../_actions/update-team';
+import { TLang } from '@/lib/models';
 
-export function Equipo({ miembro }: { miembro: TEquipo }) {
+export function Equipo({
+  miembro,
+  lang = 'ES'
+}: {
+  miembro: TEquipo;
+  lang?: TLang;
+}) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const setLoading = useGlobalStore((state) => state.setLoading);
@@ -101,7 +108,7 @@ export function Equipo({ miembro }: { miembro: TEquipo }) {
           url_image: miembro.url_image
         }}
         onSubmit={async (formData) => {
-          await updateEquipo(formData);
+          await updateEquipo(formData, lang);
         }}
       />
     </>

@@ -3,3 +3,5 @@ export enum EnumEstado {
   CERRADA = 'Cerrada',
   PENDIENTE = 'Pendiente'
 }
+
+export type TLang = 'ES' | 'EN';

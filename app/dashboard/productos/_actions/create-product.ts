@@ -1,9 +1,11 @@
 import { BASE_URL } from '@/lib/constant';
 import { nextProductos } from '../types';
+import { TLang } from '@/lib/models';
 
 // ✅ CREATE
-export async function createProducto(formData: FormData) {
+export async function createProducto(formData: FormData, lang: TLang = 'ES') {
   const payload = {
+    lang,
     categoría: formData.get('categoría'),
     nombre: formData.get('nombre'),
     titulo: formData.get('titulo'),

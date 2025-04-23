@@ -1,9 +1,11 @@
 import { BASE_URL } from '@/lib/constant';
 import { nextVancies } from '../types';
+import { TLang } from '@/lib/models';
 
 // ✅ CREATE
-export async function createVacante(formData: FormData) {
+export async function createVacante(formData: FormData, lang: TLang = 'ES') {
   const payload = {
+    lang,
     titulo: formData.get('titulo'),
     descripcion: formData.get('descripcion'),
     salario: Number(formData.get('salario')),

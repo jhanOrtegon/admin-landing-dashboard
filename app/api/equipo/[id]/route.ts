@@ -8,19 +8,20 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
     const id = Number(context?.params?.id);
     const body = await req.json();
 
-    const { url_image, nombre, descripcion, cargo } = body;
+    const { url_image, nombre, descripcion, cargo, lang } = body;
 
     await sql`
       UPDATE equipo SET
         url_image = ${url_image},
         nombre = ${nombre},
+        lang = ${lang},
         descripcion = ${descripcion},
         cargo = ${cargo}
       WHERE id = ${id};
     `;
 
-    revalidateTag(`equipo-${id}`);
-    revalidateTag('equipo');
+    revalidateTag(`equipo-${id}-${lang}`);
+    revalidateTag(`equipo-${lang}`);
 
     return NextResponse.json({
       status: 'ok',
@@ -40,10 +41,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
 }
 
 // ✅ DELETE: Eliminar un miembro del equipo
-export async function DELETE(
-  req: NextRequest,
-  context: any
-): Promise<Response> {
+export async function DELETE(context: any): Promise<Response> {
   try {
     const id = Number(context?.params?.id);
 

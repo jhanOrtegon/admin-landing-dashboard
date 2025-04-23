@@ -16,8 +16,15 @@ import {
 } from '@/components/ui/card';
 import { Equipo } from './equipo';
 import { TEquipo } from '../types';
+import { TLang } from '@/lib/models';
 
-export function EquipoTable({ equipo }: { equipo: TEquipo[] }) {
+export function EquipoTable({
+  equipo,
+  lang = 'ES'
+}: {
+  lang?: TLang;
+  equipo: TEquipo[];
+}) {
   return (
     <Card>
       <CardHeader>
@@ -42,7 +49,7 @@ export function EquipoTable({ equipo }: { equipo: TEquipo[] }) {
           </TableHeader>
           <TableBody>
             {equipo.map((miembro) => (
-              <Equipo key={miembro.id} miembro={miembro} />
+              <Equipo key={miembro.id} lang={lang} miembro={miembro} />
             ))}
           </TableBody>
         </Table>

@@ -1,10 +1,12 @@
 import { BASE_URL } from '@/lib/constant';
+import { TLang } from '@/lib/models';
 
 // ✅ UPDATE EQUIPO
-export async function updateEquipo(formData: FormData) {
+export async function updateEquipo(formData: FormData, lang: TLang = 'ES') {
   const id = formData.get('id');
 
   const payload = {
+    lang,
     url_image: formData.get('url_image'),
     nombre: formData.get('nombre'),
     descripcion: formData.get('descripcion'),

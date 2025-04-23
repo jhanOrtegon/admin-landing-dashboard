@@ -20,11 +20,14 @@ import { deleteVacante } from '../_actions/delete-vacancie';
 import { updateVacante } from '../_actions/update-vacancie';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import VacanteForm from './vacante-form';
+import { TLang } from '@/lib/models';
 
 export function Vacante({
+  lang = 'ES',
   vacante,
   listTecnologias
 }: {
+  lang?: TLang;
   vacante: TVacante;
   listTecnologias: { id: number; nombre: string }[];
 }) {
@@ -119,7 +122,7 @@ export function Vacante({
         }}
         tecnologias={listTecnologias}
         onSubmit={async (formData) => {
-          await updateVacante(formData);
+          await updateVacante(formData, lang);
         }}
       />
     </>

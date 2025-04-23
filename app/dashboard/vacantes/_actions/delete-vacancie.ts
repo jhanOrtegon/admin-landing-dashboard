@@ -1,4 +1,5 @@
 import { BASE_URL } from '@/lib/constant';
+import { TLang } from '@/lib/models';
 
 // ✅ DELETE
 export async function deleteVacante(formData: FormData) {

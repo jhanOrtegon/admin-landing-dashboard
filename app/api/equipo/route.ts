@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     const result = await sql`
-      SELECT id, url_image, nombre, descripcion, cargo
+      SELECT id, url_image, nombre, descripcion, cargo, lang
       FROM equipo
       ORDER BY id ASC
       LIMIT 100;
@@ -33,7 +33,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { url_image, nombre, descripcion, cargo } = body;
+    const { url_image, nombre, descripcion, cargo, lang } = body;
 
     if (!nombre || !cargo) {
       return NextResponse.json(
@@ -50,16 +50,18 @@ export async function POST(req: Request) {
         url_image,
         nombre,
         descripcion,
-        cargo
+        cargo,
+        lang
       ) VALUES (
         ${url_image},
         ${nombre},
         ${descripcion},
-        ${cargo}
+        ${cargo},
+        ${lang}
       );
     `;
 
-    revalidateTag('equipo');
+    revalidateTag(`equipo-${lang}`);
 
     return NextResponse.json({
       status: 'ok',

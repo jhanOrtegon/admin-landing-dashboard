@@ -16,8 +16,15 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Product } from './product';
+import { TLang } from '@/lib/models';
 
-export function ProductsTable({ data }: { data: TProducto[] }) {
+export function ProductsTable({
+  data,
+  lang = 'ES'
+}: {
+  data: TProducto[];
+  lang?: TLang;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -45,7 +52,7 @@ export function ProductsTable({ data }: { data: TProducto[] }) {
           </TableHeader>
           <TableBody>
             {data.map((product) => (
-              <Product key={product.id} product={product} />
+              <Product key={product.id} product={product} lang={lang} />
             ))}
           </TableBody>
         </Table>

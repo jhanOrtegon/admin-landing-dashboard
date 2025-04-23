@@ -3,7 +3,7 @@ import { revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 function toPgTextArray(arr: string[]): string {
-  return `{${arr.map((item) => `"${item}"`).join(',')}}`;
+  return `{${arr.map((item) => `"${item.replace(/"/g, '\\"')}"`).join(',')}}`;
 }
 
 export async function GET() {
@@ -11,6 +11,7 @@ export async function GET() {
     const result = await sql`
       SELECT 
         p.id,
+        p.lang,
         p."categoría",
         p.nombre,
         p.titulo,
@@ -46,6 +47,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
+      lang,
       categoría,
       nombre,
       titulo,
@@ -69,7 +71,8 @@ export async function POST(req: Request) {
         descripción,
         imagen_principal,
         imagen_nombre_principal,
-        carasteristicas
+        carasteristicas,
+        lang
       ) VALUES (
         ${categoría},
         ${nombre},
@@ -77,11 +80,12 @@ export async function POST(req: Request) {
         ${descripción},
         ${imagen_principal},
         ${imagen_nombre_principal},
-        ${carasteristicasPgArray}::text[]
+        ${carasteristicasPgArray}::text[],
+        ${lang}
       );
     `;
 
-    revalidateTag('productos');
+    revalidateTag(`productos-${lang}`);
 
     return NextResponse.json({ status: 'ok', message: 'Producto creado' });
   } catch (error) {

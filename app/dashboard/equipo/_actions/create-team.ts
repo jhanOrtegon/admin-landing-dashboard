@@ -1,12 +1,14 @@
 import { BASE_URL } from '@/lib/constant';
+import { TLang } from '@/lib/models';
 
 export const nextEquipo = {
   tags: ['equipo']
 };
 
 // ✅ CREATE EQUIPO
-export async function createEquipo(formData: FormData) {
+export async function createEquipo(formData: FormData, lang: TLang = 'ES') {
   const payload = {
+    lang,
     url_image: formData.get('url_image'),
     nombre: formData.get('nombre'),
     descripcion: formData.get('descripcion'),

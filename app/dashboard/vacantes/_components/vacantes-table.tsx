@@ -16,11 +16,14 @@ import {
 } from '@/components/ui/card';
 import { Vacante } from './vacante';
 import { TVacante } from '../types';
+import { TLang } from '@/lib/models';
 
 export function VacantesTable({
+  lang = 'ES',
   tecnologias,
   vacantes
 }: {
+  lang?: TLang;
   tecnologias: { id: number; nombre: string }[];
   vacantes: TVacante[];
 }) {
@@ -49,6 +52,7 @@ export function VacantesTable({
           <TableBody>
             {vacantes.map((vacante) => (
               <Vacante
+                lang={lang}
                 key={vacante.id}
                 vacante={vacante}
                 listTecnologias={tecnologias}
