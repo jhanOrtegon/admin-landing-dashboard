@@ -60,12 +60,12 @@ export async function POST(req: Request) {
         titulo,
         descripcion,
         salario,
-        ubicacion,
+        ubicacion
       ) VALUES (
         ${titulo},
         ${descripcion},
         ${salario},
-        ${ubicacion},
+        ${ubicacion}
       )
       RETURNING id;
     `;
