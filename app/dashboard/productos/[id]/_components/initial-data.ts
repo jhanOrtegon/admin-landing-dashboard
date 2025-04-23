@@ -343,5 +343,5 @@ export const activosFijosDataInitial = {
     ]
   }),
 
-  product_id: JSON.stringify(13)
+  product_id: '13'
 };
