@@ -14,10 +14,8 @@ import { deleteProductoDetail } from './_actions/delete-product-detail';
 import { useParams, useRouter } from 'next/navigation';
 
 import { getProductos } from '../_actions/get-product';
-import {
-  dataInitialActivosFijos,
-  emptyProductDetailSections
-} from './_components/types';
+import { emptyProductDetailSections } from './_components/types';
+import { activosFijosDataInitial } from './_components/initial-data';
 import { sectionSchemas } from './_schemas/schemas';
 import { TProducto } from '../types';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -70,12 +68,12 @@ export default function ProductPageDetail() {
         setFormState({ ...mapped, product_id: product?.id.toString() });
       } else {
         const mapped: Record<string, string> = {};
-        const current = emptyProductDetailSections as any;
-        // const current = dataInitial as any;
+        // const current = emptyProductDetailSections as any;
+        const current = activosFijosDataInitial as any;
 
         fields.forEach((f) => (mapped[f] = JSON.stringify(current[f] || {})));
-        setFormState({ ...mapped, product_id: product?.id.toString() });
-        // setFormState({ ...dataInitial });
+        // setFormState({ ...mapped, product_id: product?.id.toString() });
+        setFormState({ ...activosFijosDataInitial });
       }
     } catch {
       showToast('Error al consultar el detalle', 'error');
