@@ -15,7 +15,6 @@ export async function updateProductoDetail(formData: FormData) {
     'cuarto_bloque',
     'quinto_bloque',
     'preguntas',
-    'apoyo',
     'product_id'
   ];
 

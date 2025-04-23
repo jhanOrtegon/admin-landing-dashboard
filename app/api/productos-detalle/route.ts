@@ -13,7 +13,6 @@ export async function GET() {
         pd.cuarto_bloque,
         pd.quinto_bloque,
         pd.preguntas,
-        pd.apoyo,
         pd.product_id,
         p.nombre AS producto_nombre,
         pd.fecha_creacion
@@ -52,7 +51,6 @@ export async function POST(req: Request) {
       cuarto_bloque,
       quinto_bloque,
       preguntas,
-      apoyo,
       product_id
     } = body;
 
@@ -65,7 +63,6 @@ export async function POST(req: Request) {
         cuarto_bloque,
         quinto_bloque,
         preguntas,
-        apoyo,
         product_id
       ) VALUES (
         ${JSON.stringify(banner)}::jsonb,
@@ -75,7 +72,6 @@ export async function POST(req: Request) {
         ${JSON.stringify(cuarto_bloque)}::jsonb,
         ${JSON.stringify(quinto_bloque)}::jsonb,
         ${JSON.stringify(preguntas)}::jsonb,
-        ${JSON.stringify(apoyo)}::jsonb,
         ${product_id}
       );
     `;

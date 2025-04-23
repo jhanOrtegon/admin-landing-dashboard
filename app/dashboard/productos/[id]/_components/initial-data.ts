@@ -169,16 +169,6 @@ export const biowelDataInitial = {
       }
     ]
   }),
-  apoyo: JSON.stringify({
-    id: 'be0763b1-8222-44ba-b26d-d4a8dff4b05b',
-    categoria: 'Aliados',
-    nombre: 'Desarrollado con el apoyo de:',
-    urls: [
-      'https://www.ttncompany.com/static/media/icono_sena.png',
-      'https://www.ttncompany.com/static/media/icono_mincomercio.png',
-      'https://www.ttncompany.com/static/media/icono_colciencias.png'
-    ]
-  }),
   product_id: '9'
 };
 
@@ -352,15 +342,6 @@ export const activosFijosDataInitial = {
       }
     ]
   }),
-  apoyo: JSON.stringify({
-    id: '1464389c-27d3-4560-b555-972ee47f3c38',
-    categoria: 'Aliados.',
-    nombre: 'Desarrollado con el apoyo de:',
-    urls: [
-      'https://www.ttncompany.com/static/media/senaLogo.fd5739fdc77497a2b216a8f4309160e5.svg',
-      'https://www.ttncompany.com/static/media/focaLogo.4986d321bbd90deccd1e3df6633e7609.svg',
-      'https://www.ttncompany.com/static/media/colombiaProductiva.35968a9342062dd23e69bce6e5549a28.svg'
-    ]
-  }),
+
   product_id: JSON.stringify(13)
 };

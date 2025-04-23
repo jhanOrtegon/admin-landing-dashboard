@@ -47,7 +47,6 @@ export default function ProductPageDetail() {
     'cuarto_bloque',
     'quinto_bloque',
     'preguntas',
-    'apoyo',
     'product_id'
   ];
 

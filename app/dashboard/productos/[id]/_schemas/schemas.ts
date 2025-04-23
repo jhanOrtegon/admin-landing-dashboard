@@ -54,12 +54,6 @@ const PreguntasSeccionSchema = z.object({
   tabs: z.array(TabSchema.omit({ carasteristicas: true }))
 });
 
-const ApoyoSeccionSchema = z.object({
-  categoria: z.string().min(1),
-  nombre: z.string().min(1),
-  urls: z.array(z.string().min(1).url())
-});
-
 export const sectionSchemas = {
   banner: BannerSchema,
   primer_bloque: PrimeraSeccionSchema,
@@ -67,6 +61,5 @@ export const sectionSchemas = {
   tercer_bloque: TerceraSeccionSchema,
   cuarto_bloque: CuartaYQuintaSeccionSchema,
   quinto_bloque: CuartaYQuintaSeccionSchema,
-  preguntas: PreguntasSeccionSchema,
-  apoyo: ApoyoSeccionSchema
+  preguntas: PreguntasSeccionSchema
 };

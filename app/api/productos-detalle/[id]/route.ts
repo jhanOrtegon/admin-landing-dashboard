@@ -13,8 +13,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
       tercer_bloque,
       cuarto_bloque,
       quinto_bloque,
-      preguntas,
-      apoyo
+      preguntas
     } = body;
 
     await sql`
@@ -26,7 +25,6 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
         cuarto_bloque = ${JSON.stringify(cuarto_bloque)}::jsonb,
         quinto_bloque = ${JSON.stringify(quinto_bloque)}::jsonb,
         preguntas = ${JSON.stringify(preguntas)}::jsonb,
-        apoyo = ${JSON.stringify(apoyo)}::jsonb
       WHERE id = ${id};
     `;
 
