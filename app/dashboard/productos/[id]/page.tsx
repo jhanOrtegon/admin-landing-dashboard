@@ -14,7 +14,10 @@ import { deleteProductoDetail } from './_actions/delete-product-detail';
 import { useParams, useRouter } from 'next/navigation';
 
 import { getProductos } from '../_actions/get-product';
-import { dataInitial, emptyProductDetailSections } from './_components/types';
+import {
+  dataInitialActivosFijos,
+  emptyProductDetailSections
+} from './_components/types';
 import { sectionSchemas } from './_schemas/schemas';
 import { TProducto } from '../types';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
