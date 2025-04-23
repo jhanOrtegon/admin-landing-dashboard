@@ -202,7 +202,7 @@ export const activosFijosDataInitial = {
   primer_bloque: JSON.stringify({
     id: '37c09fa1-79ef-4092-8aed-80cd9f571087',
     texto:
-      'Activos Fijos es un sistema integral desarrollado para optimizar la administración y el control de los bienes físicos de una organización...',
+      'Activos Fijos es un sistema integral desarrollado para optimizar la administración y el control de los bienes físicos de una organización, permitiendo un manejo eficiente y transparente de los mismos.',
     nombre: '¿Qué es Activos Fijos?',
     primera_url_imagen:
       'https://res.cloudinary.com/dher7tltc/image/upload/v1745355945/image_esfnqk.png',
@@ -218,7 +218,7 @@ export const activosFijosDataInitial = {
         id: 'eb3ad90c-cc73-4d09-874a-92672d063a14',
         nombre: 'Adquisición de Activos.',
         texto:
-          'Registro de bienes adquiridos con información de proveedor, costo y factura.',
+          'Registro de bienes adquiridos con información de proveedor, costo, factura, y fecha de ingreso.',
         url_imagen:
           'https://res.cloudinary.com/dher7tltc/image/upload/v1745355945/image2_zp8mmf.png'
       },
@@ -226,7 +226,7 @@ export const activosFijosDataInitial = {
         id: '99fa37d3-a87c-4988-ac15-5b22c310f50a',
         nombre: 'Registro Contable.',
         texto:
-          'Clasificación por grupos y subgrupos contables según normativa interna.',
+          'Clasificación contable del activo, asociando cuentas, centros de costo y criterios de amortización.',
         url_imagen:
           'https://res.cloudinary.com/dher7tltc/image/upload/v1745355945/image3_jbahwg.png'
       },
@@ -234,7 +234,7 @@ export const activosFijosDataInitial = {
         id: 'e1426efa-285a-45df-a8e2-12560f1ca8f1',
         nombre: 'Depreciación.',
         texto:
-          'Cálculo automático según método predefinido, valor residual y ajustes fiscales.',
+          'Cálculo automático de la depreciación mensual con base en métodos como línea recta o saldo decreciente.',
         url_imagen:
           'https://res.cloudinary.com/dher7tltc/image/upload/v1745355945/image5_ntq49e.png'
       }
