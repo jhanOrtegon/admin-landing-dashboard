@@ -9,8 +9,9 @@ export async function updateVacante(formData: FormData, lang: TLang = 'ES') {
     lang,
     titulo: formData.get('titulo'),
     descripcion: formData.get('descripcion'),
-    salario: Number(formData.get('salario')),
+    salario: formData.get('salario'),
     ubicacion: formData.get('ubicacion'),
+    modalidad: formData.get('modalidad'),
     tecnologia_id: formData
       .getAll('tecnologia_id[]')
       .filter((v) => v !== 'null')

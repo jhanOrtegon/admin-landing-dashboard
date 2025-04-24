@@ -20,11 +20,9 @@ import { TLang } from '@/lib/models';
 
 export function VacantesTable({
   lang = 'ES',
-  tecnologias,
   vacantes
 }: {
   lang?: TLang;
-  tecnologias: { id: number; nombre: string }[];
   vacantes: TVacante[];
 }) {
   return (
@@ -41,7 +39,8 @@ export function VacantesTable({
             <TableRow>
               <TableHead>Id</TableHead>
               <TableHead>Nombre</TableHead>
-              <TableHead>Tecnologías</TableHead>
+              <TableHead>Habilidades</TableHead>
+              <TableHead>Modalidad</TableHead>
               <TableHead>Descripción</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead>
@@ -51,12 +50,7 @@ export function VacantesTable({
           </TableHeader>
           <TableBody>
             {vacantes.map((vacante) => (
-              <Vacante
-                lang={lang}
-                key={vacante.id}
-                vacante={vacante}
-                listTecnologias={tecnologias}
-              />
+              <Vacante lang={lang} key={vacante.id} vacante={vacante} />
             ))}
           </TableBody>
         </Table>

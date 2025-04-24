@@ -12,13 +12,10 @@ export async function GET() {
         v.salario, 
         v.ubicacion,
         v.lang,
-        ARRAY_AGG(t.nombre) AS tecnologias
+        v.tecnologias,
+        v.modalidad
       FROM 
         Vacantes v
-      LEFT JOIN 
-        Vacantes_Tecnologias vt ON v.id = vt.vacante_id
-      LEFT JOIN 
-        Tecnologias t ON vt.tecnologia_id = t.id
       GROUP BY 
         v.id
       ORDER BY 
@@ -52,7 +49,8 @@ export async function POST(req: Request) {
       descripcion,
       salario,
       ubicacion,
-      tecnologia_id, // string[] o number[]
+      tecnologia_id,
+      modalidad,
       lang = 'ES' // valor por defecto si no viene
     } = body;
 
@@ -65,43 +63,27 @@ export async function POST(req: Request) {
     }
 
     // 1. Insertar vacante
-    const result = await sql`
+    await sql`
       INSERT INTO Vacantes (
         titulo,
         descripcion,
         salario,
         ubicacion,
+        ubicacion,
+        tecnologias,
+        modalidad,
         lang
       ) VALUES (
         ${titulo},
         ${descripcion},
         ${salario},
         ${ubicacion},
+        ${tecnologia_id},
+        ${modalidad},
         ${lang}
       )
       RETURNING id;
     `;
-
-    const vacanteId = result[0]?.id;
-
-    // 2. Insertar tecnologías
-    if (Array.isArray(tecnologia_id) && tecnologia_id.length > 0 && vacanteId) {
-      const values: any[] = [];
-      const placeholders: string[] = [];
-
-      tecnologia_id.forEach((techId, index) => {
-        values.push(vacanteId, Number(techId));
-        placeholders.push(`($${index * 2 + 1}, $${index * 2 + 2})`);
-      });
-
-      await sql.query(
-        `
-          INSERT INTO vacantes_tecnologias (vacante_id, tecnologia_id)
-          VALUES ${placeholders.join(', ')}
-        `,
-        values
-      );
-    }
 
     // 3. Revalidar caché
     revalidateTag(`vacantes-${lang}`);

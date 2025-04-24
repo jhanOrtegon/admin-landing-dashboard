@@ -24,12 +24,10 @@ import { TLang } from '@/lib/models';
 
 export function Vacante({
   lang = 'ES',
-  vacante,
-  listTecnologias
+  vacante
 }: {
   lang?: TLang;
   vacante: TVacante;
-  listTecnologias: { id: number; nombre: string }[];
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
@@ -69,7 +67,7 @@ export function Vacante({
           </div>
         </TableCell>
         <TableCell className="font-medium max-w-md">
-          {vacante.descripcion}
+          {vacante.modalidad}
         </TableCell>
         <TableCell>
           <Badge variant="outline" className="capitalize">
@@ -113,6 +111,7 @@ export function Vacante({
         defaultValues={{
           id: vacante.id,
           titulo: vacante.titulo,
+          modalidad: vacante.modalidad,
           descripcion: vacante.descripcion,
           salario: vacante.salario,
           ubicacion: vacante.ubicacion,
@@ -120,7 +119,6 @@ export function Vacante({
             ? vacante.tecnologias.map((t) => String(t))
             : []
         }}
-        tecnologias={listTecnologias}
         onSubmit={async (formData) => {
           await updateVacante(formData, lang);
         }}

@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import { z } from 'zod';
 import { TOpcion, TOpcionResponse } from 'selects/options';
 import { Badge } from '@/components/ui/badge';
@@ -33,7 +33,8 @@ import { useRouter } from 'next/navigation';
 export const VacanteSchema = z.object({
   titulo: z.string().min(3, 'El nombre es obligatorio'),
   descripcion: z.string().min(10, 'La descripción es obligatoria'),
-  salario: z.string().regex(/^\d+$/, 'El salario debe ser un número entero'),
+  salario: z.string().min(1, 'El salario es obligatorio'),
+  modalidad: z.string().min(1, 'La modalidad es obligatorio'),
   tecnologia_id: z
     .array(z.string())
     .min(1, 'Seleccione al menos una tecnología')
@@ -46,11 +47,11 @@ type Props = {
     id?: number;
     titulo: string;
     descripcion: string;
-    salario: number;
+    salario: string;
     ubicacion: string;
+    modalidad: string;
     tecnologia_id: string[];
   };
-  tecnologias: TOpcionResponse<TOpcion>['data'];
   onSubmit: (formData: FormData) => Promise<void>;
   children?: React.ReactNode;
   mode?: Mode;
@@ -60,7 +61,6 @@ type Props = {
 
 export default function VacanteForm({
   defaultValues,
-  tecnologias,
   onSubmit,
   children,
   mode = 'create',
@@ -76,6 +76,8 @@ export default function VacanteForm({
   const router = useRouter();
 
   const [titulo, setTitulo] = useState(defaultValues?.titulo || '');
+
+  const [newHabilidad, setNewHabilidad] = useState('');
 
   const [descripcion, setDescripcion] = useState(
     defaultValues?.descripcion || ''
@@ -93,18 +95,37 @@ export default function VacanteForm({
     defaultValues?.tecnologia_id || []
   );
 
+  const [modalidad, setModalidad] = useState<string>(
+    defaultValues?.modalidad?.toString() || ''
+  );
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && newHabilidad.trim() !== '') {
+      e.preventDefault();
+      if (!tecnologiaId.includes(newHabilidad.trim())) {
+        setTecnologiaId([...tecnologiaId, newHabilidad.trim()]);
+      }
+      setNewHabilidad('');
+    }
+  };
+
+  const handleRemoveCarasteristica = (index: number) => {
+    const updated = [...tecnologiaId];
+    updated.splice(index, 1);
+    setTecnologiaId(updated);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setIsLoading(true);
 
-    const cleanSalario = salario.replace(/[^0-9]/g, '');
-
     const values = {
       titulo,
       descripcion,
-      salario: cleanSalario,
+      salario,
       ubicacion,
+      modalidad,
       tecnologia_id: tecnologiaId
     };
 
@@ -127,13 +148,14 @@ export default function VacanteForm({
 
     formData.append('titulo', titulo);
     formData.append('descripcion', descripcion);
-    formData.append('salario', cleanSalario);
+    formData.append('salario', salario);
     formData.append('ubicacion', ubicacion);
+    formData.append('modalidad', modalidad);
 
     // Array manual
-    tecnologias.forEach((id) => {
-      if (tecnologiaId.includes(id.nombre)) {
-        formData.append('tecnologia_id[]', id.id.toString());
+    tecnologiaId.forEach((tec) => {
+      if (tecnologiaId.includes(tec)) {
+        formData.append('tecnologia_id[]', tec);
       }
     });
 
@@ -160,6 +182,7 @@ export default function VacanteForm({
         setTitulo(defaultValues.titulo || '');
         setDescripcion(defaultValues.descripcion || '');
         setSalario(defaultValues.salario?.toString() || '');
+        setModalidad(defaultValues.modalidad?.toString() || '');
         setUbicacion(defaultValues.ubicacion || '');
         setTecnologiaId(defaultValues.tecnologia_id || []);
       }
@@ -168,6 +191,7 @@ export default function VacanteForm({
       setTitulo('');
       setDescripcion('');
       setSalario('');
+      setModalidad('');
       setUbicacion('');
       setTecnologiaId([]);
     }
@@ -205,114 +229,53 @@ export default function VacanteForm({
               className="min-h-[100px]"
             />
 
+            <Input
+              required
+              label="Salario"
+              inputMode="text"
+              value={salario}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSalario(value);
+              }}
+            />
+
+            <Input
+              required
+              label="Modalidad"
+              inputMode="text"
+              value={modalidad}
+              onChange={(e) => {
+                const value = e.target.value;
+                setModalidad(value);
+              }}
+            />
+
             <div>
-              <label className="text-sm font-medium">Salario</label>
-              <Input
-                required
-                inputMode="numeric"
-                pattern="[0-9]*"
-                value={salario}
-                onChange={(e) => {
-                  const clean = e.target.value.replace(/[^0-9]/g, '');
-                  setSalario(clean);
-                }}
-              />
-              {salario && (
-                <p className="text-xs text-muted-foreground mt-1 ml-1">
-                  {new Intl.NumberFormat('es-CO', {
-                    style: 'currency',
-                    currency: 'COP',
-                    minimumFractionDigits: 0
-                  }).format(Number(salario))}
-                </p>
-              )}
-            </div>
-
-            {/* <div>
-              <label className="text-sm font-medium">Ubicación</label>
-              <Input
-                value={ubicacion}
-                onChange={(e) => setUbicacion(e.target.value)}
-              />
-            </div> */}
-
-            <div className="w-full">
               <label className="text-sm font-medium mb-1 block">
-                Tecnologías
+                Habilidades <span className="text-red-500">*</span>
               </label>
-
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    className="w-full justify-between"
-                  >
-                    {tecnologiaId.length > 0
-                      ? `${tecnologiaId.length} seleccionadas`
-                      : 'Seleccionar tecnologías'}
-                  </Button>
-                </PopoverTrigger>
-
-                <PopoverContent className="p-0 w-[var(--radix-popper-anchor-width)]">
-                  <Command>
-                    <CommandInput placeholder="Buscar tecnología..." />
-
-                    <div className="max-h-60 overflow-y-auto">
-                      <CommandGroup>
-                        {tecnologias.map((tecnologia) => {
-                          const id = String(tecnologia.id);
-                          const nombre = String(tecnologia.nombre);
-                          const checked = tecnologiaId.includes(nombre);
-
-                          return (
-                            <CommandItem
-                              key={id}
-                              onSelect={() => {
-                                setTecnologiaId((prev) =>
-                                  prev.includes(nombre)
-                                    ? prev.filter((v) => v !== nombre)
-                                    : [...prev, nombre]
-                                );
-                              }}
-                              className="flex items-center justify-between"
-                            >
-                              <span>{tecnologia.nombre}</span>
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                readOnly
-                                className="rounded border-muted"
-                              />
-                            </CommandItem>
-                          );
-                        })}
-                      </CommandGroup>
-                    </div>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-
-              {tecnologiaId.length > 0 ? (
+              <Input
+                value={newHabilidad}
+                onKeyDown={handleKeyDown}
+                placeholder="Escribe y presiona Enter"
+                onChange={(e) => setNewHabilidad(e.target.value)}
+              />
+              {tecnologiaId.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {tecnologiaId.map((nombre) => {
-                    const tech = tecnologias.find(
-                      (t) => String(t.nombre) === nombre
-                    );
-                    return (
-                      <Badge
-                        key={nombre}
-                        variant="outline"
-                        className="capitalize"
-                      >
-                        {tech?.nombre}
-                      </Badge>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-2 mt-2 h-[22px] w-full">
-                  &nbsp;
+                  {tecnologiaId.map((c, index) => (
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      className="flex items-center gap-1"
+                    >
+                      {c}
+                      <X
+                        className="w-3 h-3 cursor-pointer"
+                        onClick={() => handleRemoveCarasteristica(index)}
+                      />
+                    </Badge>
+                  ))}
                 </div>
               )}
             </div>

@@ -7,7 +7,8 @@ export type TVacante = {
   lang: TLang;
   titulo: string;
   descripcion: string;
-  salario: number;
+  salario: string;
+  modalidad: string;
   ubicacion: string;
   tecnologias: string[];
   fecha_publication: string;

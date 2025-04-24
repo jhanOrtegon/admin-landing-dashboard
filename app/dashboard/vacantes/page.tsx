@@ -11,9 +11,6 @@ export default async function VacantesPage(props: {
   const offset = Number(searchParams.offset ?? 0);
 
   const { vacantes } = await getVacantes(search, offset, 100);
-  const tecnologias = await getOpciones<TOpcion>('tecnologias');
 
-  return (
-    <VacantesClientPage vacantes={vacantes} tecnologias={tecnologias.data} />
-  );
+  return <VacantesClientPage vacantes={vacantes} />;
 }

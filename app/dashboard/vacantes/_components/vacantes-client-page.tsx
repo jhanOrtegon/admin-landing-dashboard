@@ -13,10 +13,9 @@ import { createVacante } from '../_actions/create-vacancie';
 
 interface Props {
   vacantes: any[];
-  tecnologias: TOpcion[];
 }
 
-export default function VacantesClientPage({ vacantes, tecnologias }: Props) {
+export default function VacantesClientPage({ vacantes }: Props) {
   const [lang, setLang] = useState<TLang>('ES');
 
   const vacantesFilter = useMemo(() => {
@@ -36,7 +35,6 @@ export default function VacantesClientPage({ vacantes, tecnologias }: Props) {
 
         <div className="flex items-center gap-2">
           <VacanteForm
-            tecnologias={tecnologias}
             onSubmit={async (formData) => {
               await createVacante(formData, lang);
             }}
@@ -54,11 +52,7 @@ export default function VacantesClientPage({ vacantes, tecnologias }: Props) {
       </div>
 
       <TabsContent value="all">
-        <VacantesTable
-          lang={lang}
-          vacantes={vacantesFilter}
-          tecnologias={tecnologias}
-        />
+        <VacantesTable lang={lang} vacantes={vacantesFilter} />
       </TabsContent>
     </Tabs>
   );

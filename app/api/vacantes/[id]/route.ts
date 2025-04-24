@@ -12,7 +12,8 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
       descripcion,
       salario,
       ubicacion,
-      tecnologia_id, // string[] o number[]
+      tecnologia_id,
+      modalidad,
       lang // nuevo campo a soportar
     } = body;
 
@@ -30,35 +31,12 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
         titulo = ${titulo},
         descripcion = ${descripcion},
         salario = ${salario},
+        modalidad = ${modalidad},
         ubicacion = ${ubicacion},
+        tecnologias = ${tecnologia_id}::text[],
         lang = ${lang ?? 'ES'}
       WHERE id = ${id};
     `;
-
-    // 2. Eliminar tecnologías actuales
-    await sql`
-      DELETE FROM vacantes_tecnologias
-      WHERE vacante_id = ${id};
-    `;
-
-    // 3. Insertar nuevas tecnologías
-    if (Array.isArray(tecnologia_id) && tecnologia_id.length > 0) {
-      const values: any[] = [];
-      const placeholders: string[] = [];
-
-      tecnologia_id.forEach((techId, index) => {
-        values.push(id, Number(techId));
-        placeholders.push(`($${index * 2 + 1}, $${index * 2 + 2})`);
-      });
-
-      await sql.query(
-        `
-          INSERT INTO vacantes_tecnologias (vacante_id, tecnologia_id)
-          VALUES ${placeholders.join(', ')}
-        `,
-        values
-      );
-    }
 
     // 4. Revalidar caché
     revalidateTag(`vacante-${id}-${lang}`);
@@ -84,9 +62,6 @@ export async function DELETE(
 ): Promise<Response> {
   try {
     const id = Number(context?.params?.id);
-
-    // Primero eliminar las relaciones en la tabla intermedia
-    await sql`DELETE FROM Vacantes_Tecnologias WHERE vacante_id = ${id};`;
 
     // Luego eliminar la vacante principal
     await sql`DELETE FROM Vacantes WHERE id = ${id};`;

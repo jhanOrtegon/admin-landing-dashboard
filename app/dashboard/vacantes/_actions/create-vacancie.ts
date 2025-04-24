@@ -7,9 +7,10 @@ export async function createVacante(formData: FormData, lang: TLang = 'ES') {
   const payload = {
     lang,
     titulo: formData.get('titulo'),
-    descripcion: formData.get('descripcion'),
-    salario: Number(formData.get('salario')),
+    salario: formData.get('salario'),
+    modalidad: formData.get('modalidad'),
     ubicacion: formData.get('ubicacion'),
+    descripcion: formData.get('descripcion'),
     fecha_publication: new Date().toISOString(),
     tecnologia_id: formData
       .getAll('tecnologia_id[]')

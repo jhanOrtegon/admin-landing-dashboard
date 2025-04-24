@@ -41,9 +41,12 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
 }
 
 // ✅ DELETE: Eliminar un miembro del equipo
-export async function DELETE(context: any): Promise<Response> {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+): Promise<Response> {
   try {
-    const id = Number(context?.params?.id);
+    const id = params.id;
 
     await sql`
       DELETE FROM equipo
