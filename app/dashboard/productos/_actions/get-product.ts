@@ -1,9 +1,10 @@
+import { TLang } from '@/lib/models';
 import { BASE_URL } from '@/lib/constant';
 import { GetProductosResponse, nextProductos, TProducto } from '../types';
 
 // ✅ GET
 export async function getProductos(
-  search: string
+  lang?: TLang
 ): Promise<GetProductosResponse> {
   try {
     const response = await fetch(`${BASE_URL}/api/productos`, {
@@ -12,9 +13,11 @@ export async function getProductos(
 
     const data: { data: TProducto[] } = await response.json();
 
-    const filtered = data.data.filter((p) =>
-      p.nombre.toLowerCase().includes(search.toLowerCase())
-    );
+    let filtered = data.data;
+
+    if (lang) {
+      filtered = data.data.filter((p) => p.lang === lang);
+    }
 
     return {
       productos: filtered.map((producto) => ({

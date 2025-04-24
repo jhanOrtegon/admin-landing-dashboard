@@ -98,7 +98,9 @@ export function Product({
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
               <DropdownMenuItem
                 onClick={() =>
-                  router.push(`/dashboard/productos/${product.slug}`)
+                  router.push(
+                    `/dashboard/productos/${product.slug}?lang=${lang}`
+                  )
                 }
               >
                 Detalle

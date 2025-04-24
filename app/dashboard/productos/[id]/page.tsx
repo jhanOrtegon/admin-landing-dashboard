@@ -11,7 +11,7 @@ import { getProductosDetalle } from './_actions/get-product-detail';
 import { createProductoDetail } from './_actions/create-product-detail';
 import { updateProductoDetail } from './_actions/update-product-detail';
 import { deleteProductoDetail } from './_actions/delete-product-detail';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 import { getProductos } from '../_actions/get-product';
 import { emptyProductDetailSections } from './_components/types';
@@ -19,11 +19,15 @@ import { biowelDataInitial } from './_components/initial-data';
 import { sectionSchemas } from './_schemas/schemas';
 import { TProducto } from '../types';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { TLang } from '@/lib/models';
 
 export default function ProductPageDetail() {
   const params = useParams();
   const slug = params?.id as string;
+  const lang: TLang = (useSearchParams().get('lang') as TLang) || 'ES';
+
   const router = useRouter();
+
   const [detalle, setDetalle] = useState<any>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formState, setFormState] = useState<Record<string, string>>({});
@@ -33,8 +37,10 @@ export default function ProductPageDetail() {
   const [product, setProduct] = useState<TProducto>();
 
   useMemo(async () => {
-    const product = await getProductos('');
-    setProduct(product.productos.find((d) => d.slug === slug));
+    const product = await getProductos(lang);
+    setProduct(
+      product.productos.find((d) => d.slug === slug && d.lang === lang)
+    );
   }, [slug]);
 
   const setLoading = useGlobalStore((state) => state.setLoading);
@@ -53,7 +59,7 @@ export default function ProductPageDetail() {
   const fetchDetalle = async () => {
     setLoading(true);
     try {
-      const response = await getProductosDetalle('');
+      const response = await getProductosDetalle(lang);
 
       if (!product?.id) {
         router.push(`/productos`);
@@ -382,8 +388,8 @@ export default function ProductPageDetail() {
       formData.append('id', detalle?.id || '');
 
       setLoading(true);
-      if (action === 'create') await createProductoDetail(formData);
-      else await updateProductoDetail(formData);
+      if (action === 'create') await createProductoDetail(formData, lang);
+      else await updateProductoDetail(formData, lang);
 
       await fetchDetalle();
       showToast(

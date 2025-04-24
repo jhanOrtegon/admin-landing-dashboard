@@ -1,6 +1,7 @@
 import { BASE_URL } from '@/lib/constant';
+import { TLang } from '@/lib/models';
 
-export async function createProductoDetail(formData: FormData) {
+export async function createProductoDetail(formData: FormData, lang: TLang) {
   const requiredFields = [
     'banner',
     'primer_bloque',
@@ -41,7 +42,7 @@ export async function createProductoDetail(formData: FormData) {
     const res = await fetch(`${BASE_URL}/api/productos-detalle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ ...payload, lang })
     });
 
     if (!res.ok) {

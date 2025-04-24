@@ -1,6 +1,7 @@
 import { BASE_URL } from '@/lib/constant';
+import { TLang } from '@/lib/models';
 
-export async function updateProductoDetail(formData: FormData) {
+export async function updateProductoDetail(formData: FormData, lang: TLang) {
   const id = formData.get('id');
 
   if (!id || id === 'null') {
@@ -45,7 +46,7 @@ export async function updateProductoDetail(formData: FormData) {
       next: { tags: [`producto-detalle-${id}`] },
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ ...payload, lang })
     });
 
     if (!res.ok) {
@@ -56,7 +57,7 @@ export async function updateProductoDetail(formData: FormData) {
     await fetch('/api/revalidate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tag: 'productos' }) // o `productos-detalle` si usas otra etiqueta
+      body: JSON.stringify({ tag: `producto-detalle-${id}` })
     });
   } catch (error) {
     console.error('Error en updateProductoDetail:', error);

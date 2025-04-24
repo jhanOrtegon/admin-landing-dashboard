@@ -169,7 +169,9 @@ export const biowelDataInitial = {
       }
     ]
   }),
-  product_id: '9'
+  // product_id: '9',
+  product_id: '16',
+  lang: 'EN'
 };
 
 export const activosFijosDataInitial = {
@@ -342,6 +344,6 @@ export const activosFijosDataInitial = {
       }
     ]
   }),
-
-  product_id: '13'
+  product_id: '13',
+  lang: 'EN'
 };

@@ -15,7 +15,8 @@ export async function GET() {
         pd.preguntas,
         pd.product_id,
         p.nombre AS producto_nombre,
-        pd.fecha_creacion
+        pd.fecha_creacion,
+        pd.lang
       FROM productos_detalle pd
       JOIN productos p ON pd.product_id = p.id
       ORDER BY pd.fecha_creacion DESC
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
+      lang,
       banner,
       primer_bloque,
       segundo_bloque,
@@ -63,7 +65,8 @@ export async function POST(req: Request) {
         cuarto_bloque,
         quinto_bloque,
         preguntas,
-        product_id
+        product_id,
+        lang
       ) VALUES (
         ${JSON.stringify(banner)}::jsonb,
         ${JSON.stringify(primer_bloque)}::jsonb,
@@ -72,7 +75,9 @@ export async function POST(req: Request) {
         ${JSON.stringify(cuarto_bloque)}::jsonb,
         ${JSON.stringify(quinto_bloque)}::jsonb,
         ${JSON.stringify(preguntas)}::jsonb,
-        ${product_id}
+        ${product_id},
+        ${lang}
+
       );
     `;
 

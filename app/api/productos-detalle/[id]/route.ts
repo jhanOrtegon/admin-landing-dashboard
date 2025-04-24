@@ -7,6 +7,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
     const body = await req.json();
 
     const {
+      lang,
       banner,
       primer_bloque,
       segundo_bloque,
@@ -25,7 +26,7 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
         cuarto_bloque = ${JSON.stringify(cuarto_bloque)}::jsonb,
         quinto_bloque = ${JSON.stringify(quinto_bloque)}::jsonb,
         preguntas = ${JSON.stringify(preguntas)}::jsonb
-      WHERE id = ${id};
+      WHERE id = ${id} AND lang = ${lang};
     `;
 
     return NextResponse.json({ status: 'ok', message: 'Detalle actualizado' });

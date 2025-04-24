@@ -1,7 +1,8 @@
 import { BASE_URL } from '@/lib/constant';
+import { TLang } from '@/lib/models';
 
 export async function getProductosDetalle(
-  search: string
+  lang: TLang
 ): Promise<{ data: any[] }> {
   try {
     const response = await fetch(`${BASE_URL}/api/productos-detalle`, {
@@ -10,9 +11,7 @@ export async function getProductosDetalle(
 
     const data: { data: any[] } = await response.json();
 
-    const filtered = data.data.filter((detalle) =>
-      detalle?.producto_nombre?.toLowerCase?.().includes(search.toLowerCase())
-    );
+    const filtered = data.data.filter((p) => p.lang === lang);
 
     return {
       data: filtered
