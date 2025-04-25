@@ -25,6 +25,8 @@ export async function GET() {
       LIMIT 100;
     `;
 
+    revalidateTag('productos');
+
     return NextResponse.json({
       status: 'ok',
       data: result
