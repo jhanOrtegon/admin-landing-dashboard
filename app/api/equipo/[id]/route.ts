@@ -2,6 +2,12 @@ import { sql } from '@/lib/db';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
+type Context = {
+  params: {
+    id: string;
+  };
+};
+
 // ✅ PATCH: Actualizar un miembro del equipo
 export async function PATCH(req: NextRequest, context: any): Promise<Response> {
   try {
@@ -42,11 +48,11 @@ export async function PATCH(req: NextRequest, context: any): Promise<Response> {
 
 // ✅ DELETE: Eliminar un miembro del equipo
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: any
 ): Promise<Response> {
   try {
-    const id = params.id;
+    const id = Number(context?.params?.id);
 
     await sql`
       DELETE FROM equipo
