@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, GripVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SortableRow, TableCell, TableRow } from '@/components/ui/table';
+import { TableCell, TableRow } from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +22,9 @@ import EquipoForm from './equipo-form';
 import { updateEquipo } from '../_actions/update-team';
 import { TLang } from '@/lib/models';
 
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 export function Equipo({
   miembro,
   lang = 'ES'
@@ -34,15 +37,26 @@ export function Equipo({
   const setLoading = useGlobalStore((state) => state.setLoading);
   const router = useRouter();
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition
+  } = useSortable({ id: miembro.id.toString() });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  };
+
   const handleDelete = async () => {
     try {
       setLoading(true);
-
       const formData = new FormData();
       formData.append('id', String(miembro.id));
-
       await deleteEquipo(formData);
-
       showToast('Miembro eliminado correctamente', 'success');
       router.refresh();
     } catch (err) {
@@ -54,7 +68,23 @@ export function Equipo({
 
   return (
     <>
-      <SortableRow id={miembro.id.toString()}>
+      <TableRow
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        className="border-b transition-colors hover:bg-muted/50"
+      >
+        <TableCell>
+          <button
+            {...listeners}
+            ref={setActivatorNodeRef}
+            className="cursor-move text-muted-foreground hover:text-foreground"
+            title="Reordenar"
+          >
+            <GripVertical className="w-4 h-4" />
+          </button>
+        </TableCell>
+
         <TableCell>{miembro.id}</TableCell>
         <TableCell>{miembro.nombre}</TableCell>
         <TableCell>{miembro.cargo}</TableCell>
@@ -69,7 +99,12 @@ export function Equipo({
         <TableCell>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button aria-haspopup="true" size="icon" variant="ghost">
+              <Button
+                aria-haspopup="true"
+                size="icon"
+                variant="ghost"
+                onPointerDown={(e) => e.stopPropagation()}
+              >
                 <MoreHorizontal className="h-4 w-4" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
@@ -85,7 +120,7 @@ export function Equipo({
             </DropdownMenuContent>
           </DropdownMenu>
         </TableCell>
-      </SortableRow>
+      </TableRow>
 
       <ConfirmDialog
         open={showDeleteModal}

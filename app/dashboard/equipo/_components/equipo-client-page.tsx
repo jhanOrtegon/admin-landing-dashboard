@@ -7,7 +7,7 @@ import EquipoForm from './equipo-form';
 import { createEquipo } from '../_actions/create-team';
 import { EquipoTable } from './equipo-table';
 import { TEquipo } from '../types';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TLang } from '@/lib/models';
 
 interface Props {
@@ -20,6 +20,16 @@ export default function EquipoClientPage({ equipo }: Props) {
   const equipoFilter = useMemo(() => {
     return equipo.filter((v) => v.lang === lang);
   }, [lang, equipo]);
+
+  const [orden, setOrden] = useState([] as string[]);
+
+  useEffect(() => {
+    if (equipoFilter.length) {
+      setOrden(equipoFilter.map((m) => m.id.toString()));
+    }
+  }, [equipoFilter, lang]);
+
+  console.log({ equipoFilter }, 'equipo');
 
   return (
     <Tabs defaultValue="all">
@@ -49,7 +59,11 @@ export default function EquipoClientPage({ equipo }: Props) {
       </div>
 
       <TabsContent value="all">
-        <EquipoTable lang={lang} equipo={equipoFilter} />
+        <EquipoTable
+          lang={lang}
+          equipo={equipoFilter}
+          orden={{ orden, setOrden }}
+        />
       </TabsContent>
     </Tabs>
   );

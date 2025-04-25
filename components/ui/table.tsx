@@ -42,6 +42,7 @@ const TableBody = ({
   children: React.ReactNode;
 }) => (
   <DndContext
+    autoScroll={false}
     collisionDetection={closestCenter}
     onDragEnd={(event) => {
       const { active, over } = event;
@@ -62,15 +63,17 @@ const TableBody = ({
 );
 
 // 🎯 Fila ordenable
-const SortableRow = ({
-  id,
-  children
-}: {
+
+type SortableRowProps = {
   id: string;
-  children: React.ReactNode;
-}) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+  children:
+    | React.ReactNode
+    | ((handleRef: (el: HTMLElement | null) => void) => React.ReactNode);
+  handleRef?: (el: HTMLElement | null) => void;
+};
+
+const SortableRow = ({ id, children, handleRef }: SortableRowProps) => {
+  const { attributes, setNodeRef, transform, transition } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -82,10 +85,15 @@ const SortableRow = ({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
-      className="border-b transition-colors hover:bg-muted/50 cursor-move"
+      className="border-b transition-colors hover:bg-muted/50"
     >
-      {children}
+      {typeof children === 'function'
+        ? (
+            children as (
+              ref: (el: HTMLElement | null) => void
+            ) => React.ReactNode
+          )(handleRef!)
+        : children}
     </tr>
   );
 };
@@ -170,6 +178,7 @@ const SortableTableBody = ({
 }) => {
   return (
     <DndContext
+      autoScroll={false}
       collisionDetection={closestCenter}
       onDragEnd={({ active, over }) => {
         if (active.id !== over?.id) {

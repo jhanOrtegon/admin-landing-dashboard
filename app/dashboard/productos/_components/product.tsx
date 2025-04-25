@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, GripVertical } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { useRouter } from 'next/navigation';
 
@@ -24,6 +24,9 @@ import { updateProducto } from '../_actions/update-product';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { TLang } from '@/lib/models';
 
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 export function Product({
   product,
   lang = 'ES'
@@ -32,9 +35,23 @@ export function Product({
   lang?: TLang;
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const router = useRouter();
-  const setLoading = useGlobalStore((state) => state.setLoading);
   const [showEditModal, setShowEditModal] = useState(false);
+  const setLoading = useGlobalStore((state) => state.setLoading);
+  const router = useRouter();
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition
+  } = useSortable({ id: product.id.toString() });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  };
 
   const handleDelete = async () => {
     try {
@@ -48,7 +65,7 @@ export function Product({
       showToast('producto eliminado correctamente', 'success');
       router.refresh();
     } catch (err) {
-      showToast('Error al eliminar product', 'error');
+      showToast('Error al eliminar producto', 'error');
     } finally {
       setLoading(false);
     }
@@ -56,7 +73,23 @@ export function Product({
 
   return (
     <>
-      <TableRow>
+      <TableRow
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        className="border-b transition-colors hover:bg-muted/50"
+      >
+        <TableCell>
+          <button
+            {...listeners}
+            ref={setActivatorNodeRef}
+            className="cursor-move text-muted-foreground hover:text-foreground"
+            title="Reordenar"
+          >
+            <GripVertical className="w-4 h-4" />
+          </button>
+        </TableCell>
+
         <TableCell className="font-medium">{product.id}</TableCell>
         <TableCell className="font-medium">{product.nombre}</TableCell>
         <TableCell className="font-medium">{product.categoría}</TableCell>
@@ -89,7 +122,12 @@ export function Product({
         <TableCell>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button aria-haspopup="true" size="icon" variant="ghost">
+              <Button
+                aria-haspopup="true"
+                size="icon"
+                variant="ghost"
+                onPointerDown={(e) => e.stopPropagation()}
+              >
                 <MoreHorizontal className="h-4 w-4" />
                 <span className="sr-only">Toggle menu</span>
               </Button>

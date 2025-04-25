@@ -8,7 +8,7 @@ import { PlusCircle } from 'lucide-react';
 import { ProductsTable } from './products-table';
 import { TProducto } from '../types';
 import { TLang } from '@/lib/models';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface Props {
   productos: TProducto[];
@@ -20,6 +20,14 @@ export function ProductClientPage({ productos }: Props) {
   const productosFilter = useMemo(() => {
     return productos.filter((v) => v.lang === lang);
   }, [lang, productos]);
+
+  const [orden, setOrden] = useState([] as string[]);
+
+  useEffect(() => {
+    if (productosFilter.length) {
+      setOrden(productosFilter.map((m) => m.id.toString()));
+    }
+  }, [productosFilter, lang]);
 
   return (
     <Tabs defaultValue="all">
@@ -48,7 +56,11 @@ export function ProductClientPage({ productos }: Props) {
       </div>
 
       <TabsContent value="all">
-        <ProductsTable data={productosFilter} lang={lang} />
+        <ProductsTable
+          lang={lang}
+          data={productosFilter}
+          orden={{ orden, setOrden }}
+        />
       </TabsContent>
     </Tabs>
   );

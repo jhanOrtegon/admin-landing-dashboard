@@ -14,6 +14,7 @@ export const SortableTableBody = ({
   children: React.ReactNode;
 }) => (
   <DndContext
+    autoScroll={false}
     collisionDetection={closestCenter}
     onDragEnd={({ active, over }) => {
       if (active.id !== over?.id) {

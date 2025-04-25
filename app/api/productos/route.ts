@@ -21,7 +21,7 @@ export async function GET() {
         p.carasteristicas,
         p.fecha_creacion
       FROM productos p
-      ORDER BY p.fecha_creacion DESC
+      ORDER BY p.orden ASC
       LIMIT 100;
     `;
 
@@ -94,6 +94,49 @@ export async function POST(req: Request) {
       {
         status: 'error',
         message: 'Error al crear producto',
+        error: error instanceof Error ? error.message : String(error)
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: Request) {
+  try {
+    const body = await req.json();
+
+    // 🧩 Caso 1: Actualizar orden global (viene un array)
+    if (Array.isArray(body.orden)) {
+      const orden = body.orden as number[];
+
+      if (orden.some((id) => typeof id !== 'number')) {
+        return NextResponse.json(
+          { status: 'error', message: 'Formato inválido del orden' },
+          { status: 400 }
+        );
+      }
+
+      // Actualiza orden por posición
+      const updates = orden.map(
+        (id, index) =>
+          sql`UPDATE productos SET orden = ${index} WHERE id = ${id};`
+      );
+
+      await Promise.all(updates);
+
+      revalidateTag(`productos`);
+    }
+
+    return NextResponse.json({
+      status: 'ok',
+      message: 'Orden de productos actualizados ✅'
+    });
+  } catch (error) {
+    console.error('Error al hacer PATCH a productos:', error);
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: 'Error al procesar la solicitud',
         error: error instanceof Error ? error.message : String(error)
       },
       { status: 500 }

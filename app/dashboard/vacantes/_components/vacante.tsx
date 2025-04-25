@@ -69,6 +69,9 @@ export function Vacante({
         <TableCell className="font-medium max-w-md">
           {vacante.modalidad}
         </TableCell>
+        <TableCell className="font-medium max-w-md">
+          {vacante.descripcion}
+        </TableCell>
         <TableCell>
           <Badge variant="outline" className="capitalize">
             {'Activo'}

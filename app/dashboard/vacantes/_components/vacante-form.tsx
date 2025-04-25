@@ -35,9 +35,7 @@ export const VacanteSchema = z.object({
   descripcion: z.string().min(10, 'La descripción es obligatoria'),
   salario: z.string().min(1, 'El salario es obligatorio'),
   modalidad: z.string().min(1, 'La modalidad es obligatorio'),
-  tecnologia_id: z
-    .array(z.string())
-    .min(1, 'Seleccione al menos una tecnología')
+  tecnologia_id: z.array(z.string()).min(1, 'Seleccione al menos una habilidad')
 });
 
 type Mode = 'create' | 'edit';

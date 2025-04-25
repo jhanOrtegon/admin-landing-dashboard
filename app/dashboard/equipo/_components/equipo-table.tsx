@@ -19,7 +19,7 @@ import {
 
 import { TEquipo } from '../types';
 import { TLang } from '@/lib/models';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core';
 import {
@@ -31,12 +31,14 @@ import { updateEquipo } from '../_actions/update-team';
 
 export function EquipoTable({
   equipo,
-  lang = 'ES'
+  lang = 'ES',
+  orden: { orden, setOrden }
 }: {
   lang?: TLang;
   equipo: TEquipo[];
+  orden: { orden: string[]; setOrden: (orden: string[]) => void };
 }) {
-  const [orden, setOrden] = useState(equipo.map((m) => m.id.toString()));
+  // console.log({ equipo, orden }, 'equipoxxxxxx');
 
   const equipoOrdenado = orden
     .map((id) => equipo.find((m) => m.id.toString() === id))
@@ -70,6 +72,7 @@ export function EquipoTable({
       </CardHeader>
       <CardContent>
         <DndContext
+          autoScroll={false}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
