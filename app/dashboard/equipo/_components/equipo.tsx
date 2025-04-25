@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { TableCell, TableRow } from '@/components/ui/table';
+import { SortableRow, TableCell, TableRow } from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,7 +54,7 @@ export function Equipo({
 
   return (
     <>
-      <TableRow>
+      <SortableRow id={miembro.id.toString()}>
         <TableCell>{miembro.id}</TableCell>
         <TableCell>{miembro.nombre}</TableCell>
         <TableCell>{miembro.cargo}</TableCell>
@@ -85,7 +85,7 @@ export function Equipo({
             </DropdownMenuContent>
           </DropdownMenu>
         </TableCell>
-      </TableRow>
+      </SortableRow>
 
       <ConfirmDialog
         open={showDeleteModal}

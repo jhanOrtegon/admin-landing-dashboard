@@ -50,11 +50,11 @@ export function ProductsTable({
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <tbody>
             {data.map((product) => (
               <Product key={product.id} product={product} lang={lang} />
             ))}
-          </TableBody>
+          </tbody>
         </Table>
       </CardContent>
     </Card>

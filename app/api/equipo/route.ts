@@ -8,7 +8,7 @@ export async function GET() {
     const result = await sql`
       SELECT id, url_image, nombre, descripcion, cargo, lang
       FROM equipo
-      ORDER BY id ASC
+      ORDER BY orden ASC
       LIMIT 100;
     `;
 
@@ -73,6 +73,48 @@ export async function POST(req: Request) {
       {
         status: 'error',
         message: 'Error al crear miembro',
+        error: error instanceof Error ? error.message : String(error)
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: Request) {
+  try {
+    const body = await req.json();
+
+    // 🧩 Caso 1: Actualizar orden global (viene un array)
+    if (Array.isArray(body.orden)) {
+      const orden = body.orden as number[];
+
+      if (orden.some((id) => typeof id !== 'number')) {
+        return NextResponse.json(
+          { status: 'error', message: 'Formato inválido del orden' },
+          { status: 400 }
+        );
+      }
+
+      // Actualiza orden por posición
+      const updates = orden.map(
+        (id, index) => sql`UPDATE equipo SET orden = ${index} WHERE id = ${id};`
+      );
+
+      await Promise.all(updates);
+
+      revalidateTag(`equipo`); // o global, si manejas múltiples idiomas
+    }
+
+    return NextResponse.json({
+      status: 'ok',
+      message: 'Orden del equipo actualizado ✅'
+    });
+  } catch (error) {
+    console.error('Error al hacer PATCH a equipo:', error);
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: 'Error al procesar la solicitud',
         error: error instanceof Error ? error.message : String(error)
       },
       { status: 500 }

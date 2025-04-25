@@ -69,7 +69,6 @@ export async function POST(req: Request) {
         descripcion,
         salario,
         ubicacion,
-        ubicacion,
         tecnologias,
         modalidad,
         lang

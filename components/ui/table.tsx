@@ -1,27 +1,28 @@
 import * as React from 'react';
-
+import {
+  useSortable,
+  SortableContext,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 import { cn } from '@/lib/utils';
 
+// 🧱 Tabla base
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div
-    className={cn(
-      'relative w-full max-h-[calc(100vh-20rem)] overflow-auto rounded-xl',
-      'scrollbar-thin scrollbar-thumb-rounded-md scrollbar-track-transparent',
-      'hover:scrollbar-thumb-gray-400 hover:dark:scrollbar-thumb-gray-600',
-      'scrollbar-thumb-transparent transition-colors duration-300'
-    )}
-  >
-    <table
-      ref={ref}
-      className={cn('w-full caption-bottom text-sm', className)}
-      {...props}
-    />
+  <div className="relative w-full max-h-[calc(100vh-20rem)] overflow-auto rounded-xl">
+    <div className="w-full overflow-x-auto">
+      <table
+        ref={ref}
+        className={cn('w-full caption-bottom text-sm', className)}
+        {...props}
+      />
+    </div>
   </div>
 ));
-Table.displayName = 'Table';
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
@@ -31,32 +32,63 @@ const TableHeader = React.forwardRef<
 ));
 TableHeader.displayName = 'TableHeader';
 
-const TableBody = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <tbody
-    ref={ref}
-    className={cn('[&_tr:last-child]:border-0', className)}
-    {...props}
-  />
-));
-TableBody.displayName = 'TableBody';
+const TableBody = ({
+  items,
+  onReorder,
+  children
+}: {
+  items: string[];
+  onReorder: (items: string[]) => void;
+  children: React.ReactNode;
+}) => (
+  <DndContext
+    collisionDetection={closestCenter}
+    onDragEnd={(event) => {
+      const { active, over } = event;
+      if (active.id !== over?.id) {
+        const oldIndex = items.indexOf(active.id as string);
+        const newIndex = items.indexOf(over?.id as string);
+        const newItems = [...items];
+        newItems.splice(oldIndex, 1);
+        newItems.splice(newIndex, 0, active.id as string);
+        onReorder(newItems);
+      }
+    }}
+  >
+    <SortableContext items={items} strategy={verticalListSortingStrategy}>
+      <tbody>{children}</tbody>
+    </SortableContext>
+  </DndContext>
+);
 
-const TableFooter = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <tfoot
-    ref={ref}
-    className={cn(
-      'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
-      className
-    )}
-    {...props}
-  />
-));
-TableFooter.displayName = 'TableFooter';
+// 🎯 Fila ordenable
+const SortableRow = ({
+  id,
+  children
+}: {
+  id: string;
+  children: React.ReactNode;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  };
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="border-b transition-colors hover:bg-muted/50 cursor-move"
+    >
+      {children}
+    </tr>
+  );
+};
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
@@ -72,6 +104,21 @@ const TableRow = React.forwardRef<
   />
 ));
 TableRow.displayName = 'TableRow';
+
+const TableFooter = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tfoot
+    ref={ref}
+    className={cn(
+      'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
+      className
+    )}
+    {...props}
+  />
+));
+TableFooter.displayName = 'TableFooter';
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
@@ -112,13 +159,45 @@ const TableCaption = React.forwardRef<
 ));
 TableCaption.displayName = 'TableCaption';
 
+const SortableTableBody = ({
+  items,
+  onReorder,
+  children
+}: {
+  items: string[];
+  onReorder: (items: string[]) => void;
+  children: React.ReactNode;
+}) => {
+  return (
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragEnd={({ active, over }) => {
+        if (active.id !== over?.id) {
+          const oldIndex = items.indexOf(active.id as string);
+          const newIndex = items.indexOf(over?.id as string);
+          const newItems = [...items];
+          newItems.splice(oldIndex, 1);
+          newItems.splice(newIndex, 0, active.id as string);
+          onReorder(newItems);
+        }
+      }}
+    >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        <tbody>{children}</tbody>
+      </SortableContext>
+    </DndContext>
+  );
+};
+
 export {
   Table,
   TableHeader,
   TableBody,
   TableFooter,
   TableHead,
-  TableRow,
   TableCell,
-  TableCaption
+  TableCaption,
+  SortableRow,
+  TableRow,
+  SortableTableBody
 };

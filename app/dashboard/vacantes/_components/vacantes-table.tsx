@@ -48,11 +48,11 @@ export function VacantesTable({
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <tbody>
             {vacantes.map((vacante) => (
               <Vacante lang={lang} key={vacante.id} vacante={vacante} />
             ))}
-          </TableBody>
+          </tbody>
         </Table>
       </CardContent>
     </Card>
